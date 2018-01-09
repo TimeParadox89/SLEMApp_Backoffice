@@ -1,46 +1,92 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 var app = {
-    // Application Constructor
+    pages:{
+      MAIN:"main_page",
+      READ:"wh_page",
+      WRITE:"ms_page"
+    },
+
     initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        app.bindEvents();
     },
-
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+    
+    /*
+    bind any events that are required on startup to listeners:
+     */
+    bindEvents: function() {
+        document.addEventListener('deviceready', app.onDeviceReady, false);
     },
+    
+    /*
+    app runs when the device is ready for user interaction:
+     */
+    onDeviceReady: function() {  
+        nfc.addNdefListener (
+            app.onNfc, // tag successfully scanned
+            function (status) { // listener successfully initialized
+               
+            },
+            function (error) { // listener fails to initialize
+                app.display("NFC reader failed to initialize " + JSON.stringify(error),"init_nfc_negative_result");
+            }
+        );
+    },
+    
+    doNothingOnNfc:function(nfcEvent){
+        //do nothing function used when an nfc event is fired and no code has to be executed
+    },
+    
+    /*
+    called when a device is close to a nfc tag
+     */
+    onNfc: function(nfcEvent){
+        var currentPage = $.mobile.activePage.attr('id');
+        app.clearAll();
+        app.onNfc = app.doNothingOnNfc;
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+        app.display("NFC contact","status_div");
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        if(currentPage === app.pages.READ){
+            var tag = nfcEvent.tag;
+            var stringPayload = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
+            app.display("You have read: " + stringPayload,"read_result");
+            app.display("NFC read","status_div");
+        }
+        else if(currentPage === app.pages.WRITE){
+            var message = [];
 
-        console.log('Received Event: ' + id);
+            var inputValue = $("#write_text_input").val();
+            record = ndef.textRecord(inputValue);
+
+            // put the record in the message array:
+            message.push(record);
+            app.display("NFC write","status_div");
+
+            // write the record to the tag:
+            nfc.write(
+                message, // write the record itself to the tag
+                function () { // when complete, run app callback function:
+                    app.display("Wrote '" + inputValue + "' to tag.","write_result"); // write to the message div
+                },
+                // app function runs if the write command fails:
+                function (reason) {
+                    app.display("There was a problem " + reason,"write_result");
+                }
+            );
+        }
+    },
+    
+    display: function(message,messageDivId) {
+        var messageDiv = document.getElementById(messageDivId);
+        messageDiv.innerHTML = message;
+    },
+    
+    /*
+    clears the message div:
+     */
+    clearAll: function() {
+        var messageReadDiv = document.getElementById("read_result");
+        var messageWriteDiv = document.getElementById("write_result");
+        messageReadDiv.innerHTML = "";
+        messageWriteDiv.innerHTML = "";
     }
 };
-
-app.initialize();

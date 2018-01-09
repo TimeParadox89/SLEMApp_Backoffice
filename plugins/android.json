@@ -8,7 +8,10 @@
   },
   "installed_plugins": {
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "team3.slemapp.backoffice"
+      "PACKAGE_NAME": "kms.teamthree.slem"
+    },
+    "phonegap-nfc": {
+      "PACKAGE_NAME": "kms.teamthree.slem"
     }
   },
   "dependent_plugins": {}
