@@ -18,30 +18,77 @@
 
 <body>
     <div data-role="page" id="home">
-        <div data-role="header" data-position="fixed">
+        <div data-role="header" data-position="fixed" class="appBar">
             <h1>SLEM Backoffice</h1>
+        </div>
+        <div class="homeHeader">
+            <center>
+                <img src="img/backoffice_main.png" />
+                <h2>SLEMApp Backoffice</h2>
+            </center>
         </div>
 
         <div class="ul-content" role="main">
+
+            <a href="#wf_page" data-transition="slide">
+                <button>
+                    Workforce Manager
+                </button>
+            </a>
+
+            <a href="#em_page" data-transition="slide">
+                <button>
+                    Equipment &amp; Materials Manager
+                </button>
+            </a>
+
             <a href="#wh_page" data-transition="slide">
                 <button>
-                    <center>
-                        <img src="img/warehouse.png" style="width:50%">
-                    </center> Warehouse Employee</button>
+                    Warehouse Manager
+                </button>
             </a>
-            <a href="#ms_page" data-transition="slide">
-                <button>
-                    <center>
-                        <img src="img/ms.png" style="width:50%">
-                    </center> MS Employee</button>
-            </a>
+
         </div>
+
+
         <div data-role="footer" data-position="fixed">
             <h1>© TeamThree Solutions</h1>
         </div>
     </div>
 
-    <div data-role="page" id="wh_page">
+    <div data-role="page" id="wf_page"  data-add-back-btn="true" >
+
+        <div data-role="header" data-position="fixed" class="appBar">
+            <h1>Workforce Manager</h1>
+            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
+            
+        </div>
+
+        <div class="homeHeader">
+            <center>
+                <img src="img/workforce.png" />
+                <h2>Workforce Manager</h2>
+            </center>
+        </div>
+
+        <div class="ul-content" role="main">
+
+            <a href="#add_employee_page" data-transition="slide">
+                <button>
+                    Add new employee
+                </button>
+            </a>
+
+            <a href="#configure_bracelet_page" data-transition="slide">
+                <button>
+                    Configure a bracelet
+                </button>
+            </a>
+
+        </div>
+    </div>
+
+    <div data-role="page" id="lettura_page">
         <div data-role="header" data-position="fixed">
             <h1>Warehouse</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
@@ -54,7 +101,7 @@
         </div>
     </div>
 
-    <div data-role="page" id="ms_page">
+    <div data-role="page" id="scrittura_page">
         <div data-role="header">
             <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
             <h1>MS</h1>
