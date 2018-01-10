@@ -224,6 +224,197 @@
 
 
 
+        <div data-role="page" id="add_batch_page">
+                <div data-role="header" data-position="fixed" class="appBar">
+                    <h1>E. &amp; M. Manager</h1>
+                    <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
+                </div>
+        
+                <div class="fieldContainer">
+                    <form>
+                        <br> Product ID
+                        <br>
+                        <input type="text" name="product_id" value="">
+                        <br> Warehouse ID
+                        <br>
+                        <input type="text" name="warehouse_id" value="">
+                        <br>Quantity
+                        <br>
+                        <input type="submit" name="quantity" value="">
+                        <br>Location
+                        <br>
+                        <input type="text" name="location" value="">
+        
+        
+                    </form>
+        
+                    <div class="ul-content" role="main">
+                        <a href="#add_location_page" data-transition="slide">
+                            <button>
+                                Add
+                            </button>
+                        </a>
+        
+                        <a href="#configure_location_page" data-transition="slide">
+                            <button> Add and Configure
+                            </button>
+                        </a>
+        
+        
+                    </div>
+        
+                </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            </div>
+        
+            </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            <div data-role="page" id="add_location_page">
+                <div data-role="header" data-position="fixed" class="appBar">
+                    <h1>Warehouse Manager</h1>
+                    <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
+                </div>
+        
+                <div class="fieldContainer">
+                    <form>
+                        <br> Name
+                        <br>
+                        <input type="text" name="name" value="">
+                        <br> City
+                        <br>
+                        <input type="text" name="city" value="">
+                        <br>Prov
+                        <br>
+                        <input type="text" name="prov" value="">
+                        <br>Country
+                        <br>
+                        <input type="text" name="country" value="">
+        
+        
+                    </form>
+        
+                    <div class="ul-content" role="main">
+                        <a href="#add_location_page" data-transition="slide">
+                            <button>
+                                Add
+                            </button>
+                        </a>
+        
+                        <a href="#configure_location_page" data-transition="slide">
+                            <button> Add and Configure
+                            </button>
+                        </a>
+        
+        
+                    </div>
+        
+                </div>
+        
+        
+        
+        
+        
+        
+            </div>
+        
+            </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            <div data-role="page" id="configure_location_page">
+                <div data-role="header" data-position="fixed" class="appBar">
+                    <h1>Warehouse Manager</h1>
+                    <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
+                </div>
+        
+                <div class="fieldContainer_configureWarehouse">
+                    <form>
+                        <br> Location ID
+                        <br>
+                        <input type="text" name="location_id_location" value="">
+                        <br> Warehouse ID
+                        <br>
+                        <input type="text" name="location_id_warehouse" value="" disabled>
+        
+                    </form>
+                </div>
+                <div class="ul-content" role="main">
+                    <a href="#configure_location" data-transition="slide">
+                        <button>
+                            Verify
+                        </button>
+                    </a>
+        
+                </div>
+            </div>
+        
+        
+        
+            <div data-role="page" id="configure_batch_page">
+                <div data-role="header" data-position="fixed" class="appBar">
+                    <h1>E. &amp; M. Manager</h1>
+                    <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
+                </div>
+        
+                <div class="fieldContainer_configureBatch">
+                    <form>
+                        <br> Batch ID
+                        <br>
+                        <input type="text" name="batch_id" value="">
+                        <br> Warehouse ID
+                        <br>
+                        <input type="text" name="batch_id" value="" disabled>
+        
+                    </form>
+        
+                </div>
+                <div class="ul-content" role="main">
+                    <a href="#configure_equipment" data-transition="slide">
+                        <button>
+                            Verify
+                        </button>
+                    </a>
+        
+                </div>
+        
+        
+        
+
 
 
 
