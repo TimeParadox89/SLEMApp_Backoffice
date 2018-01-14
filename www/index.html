@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
 
-    <title>SLEM</title>
+    <title>SLEM Backoffice</title>
 
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -17,6 +17,7 @@
 </head>
 
 <body>
+
     <div data-role="page" id="home">
         <div data-role="header" data-position="fixed" class="appBar">
             <h1>SLEM Backoffice</h1>
@@ -56,6 +57,7 @@
         </div>
     </div>
 
+
     <div data-role="page" id="wf_page">
 
         <div data-role="header" data-position="fixed" class="appBar">
@@ -73,20 +75,17 @@
 
         <div class="ul-content" role="main">
 
-            <a href="#add_employee_page" data-transition="slide">
-                <button>
-                    Add new employee
-                </button>
-            </a>
+            <button onclick="app.navigateTo('add_employee_page');">
+                Add new employee
+            </button>
 
-            <a href="#configure_bracelet_page" data-transition="slide">
-                <button>
-                    Configure a bracelet
-                </button>
-            </a>
+            <button onclick="app.navigateTo('configure_bracelet_page');">
+                Configure a bracelet
+            </button>
 
         </div>
     </div>
+
 
     <div data-role="page" id="em_page">
         <div data-role="header" data-position="fixed" class="appBar">
@@ -102,24 +101,19 @@
         </div>
 
         <div class="ul-content" role="main">
-            <a href="#add_batch_page" data-transition="slide">
-                <button>
-                    Add a new Batch
-                </button>
-            </a>
 
-            <a href="#configure_batch_page" data-transition="slide">
-                <button> Configure an exsisting batch
-                </button>
-            </a>
+            <button onclick="app.navigateTo('add_batch_page');">
+                Add a new Batch
+            </button>
 
+            <button onclick="app.navigateTo('configure_batch_page');">
+                Configure an exsisting batch
+            </button>
 
         </div>
 
-
     </div>
 
-    </div>
 
     <div data-role="page" id="wh_page">
         <div data-role="header" data-position="fixed" class="appBar">
@@ -135,21 +129,18 @@
         </div>
 
         <div class="ul-content" role="main">
-            
-                <button onclick="app.navigateTo('add_location_page');">
-                    Add a new location
-                </button>
-            
 
-            <a href="#configure_location_page" data-transition="slide">
-                <button> Configure an exsisting location
-                </button>
-            </a>
+            <button onclick="app.navigateTo('add_location_page');">
+                Add a new location
+            </button>
+
+            <button onclick="app.navigateTo('configure_location_page');">
+                Configure an exsisting location
+            </button>
+
         </div>
-    </div>
-    </div>
 
-
+    </div>
 
 
     <div data-role="page" id="add_employee_page">
@@ -161,38 +152,51 @@
         </div>
 
         <div class="fieldContainer">
-            <form>
+            <form id="addUserForm">
                 First name:
-                <input type="text" name="firstname">
+                <input type="text" name="firstname" id="firstname">
                 <br> Last name:
-                <input type="text" name="lastname">
+                <input type="text" name="lastname" id="lastname">
                 <br> Birth Date:
-                <input type="text" name="lastname">
+                <input type="text" name="birthdate" id="birthdate">
                 <br> Fiscal Code:
-                <input type="text" name="lastname">
+                <input type="text" name="fiscalcode" id="fiscalcode">
                 <br> Role:
-                <input type="text" name="lastname">
+                <input type="text" name="roleid" id="roleid">
                 <br> Warehouse ID:
-                <input type="text" name="lastname" disabled>
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
             </form>
         </div>
 
         <div class="ul-content" role="main">
 
-            <a href="#add_employee_db_page" data-transition="slide">
-                <button>
+            <div id="addUserDefault" class="defaultAdd">
+                <button onclick="app.implementMe();">
                     Add
                 </button>
-            </a>
 
-            <a href="#configure_bracelet_page" data-transition="slide">
-                <button>
+                <button onclick="app.implementMe();">
                     Add and Configure a bracelet
                 </button>
-            </a>
+            </div>
+            <div id="addUserResponse" class="successResponse" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        Employee Added Successfully
+                    </center>
+                </div>
+
+                <button onclick="app.implementMe();">
+                    Configure a Bracelet
+                </button>
+
+            </div>
 
         </div>
     </div>
+
 
     <div data-role="page" id="configure_bracelet_page">
 
@@ -205,23 +209,38 @@
         <div class="fieldContainer">
             <form>
                 Fiscal Code:
-                <input type="text" name="firstname">
+                <input type="text" name="fiscalcodeVerify">
                 <br> Warehouse ID:
-                <input type="text" name="lastname" disabled>
+                <input type="text" name="warehouseID" class="warehouseID" disabled>
             </form>
         </div>
 
         <div class="ul-content" role="main">
 
-            <a href="#configure_bracelet_page" data-transition="slide">
-                <button>
+            <div id="verifyUserDefault" class="defaultAdd">
+
+                <button onclick="app.implementMe();">
                     Verify
                 </button>
-            </a>
+
+            </div>
+            <div id="verifyUserResponse" class="successResponse" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        The Employee is in the DB
+                    </center>
+                </div>
+
+                <button onclick="app.implementMe();">
+                    Configure the Bracelet
+                </button>
+
+            </div>
 
         </div>
     </div>
-
 
 
     <div data-role="page" id="add_batch_page">
@@ -232,57 +251,51 @@
 
         <div class="fieldContainer">
             <form>
-                <br> Product ID
-                <br>
-                <input type="text" name="product_id" value="">
+                Product ID
+                <input type="text" name="productid" id="productid" value="">
                 <br> Warehouse ID
-                <br>
-                <input type="text" name="warehouse_id" value="">
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="">
                 <br>Quantity
-                <br>
-                <input type="submit" name="quantity" value="">
+                <input type="submit" name="quantity" id="quantity" value="">
                 <br>Location
-                <br>
-                <input type="text" name="location" value="">
+                <input type="text" name="batchLocation" id="batchLocation" value="">
 
 
             </form>
 
             <div class="ul-content" role="main">
 
-                <button>
-                    Add
-                </button>
+                <div id="addBatchDefault" class="defaultAdd">
 
-
-                <a href="#configure_location_page" data-transition="slide">
-                    <button> Add and Configure
+                    <button onclick="app.implementMe();">
+                        Add
                     </button>
-                </a>
 
+                    <button onclick="app.implementMe();">
+                        Add and Configure
+                    </button>
 
+                </div>
+
+                <div id="addBatchResponse" class="successResponse" hidden>
+
+                    <div class="successBox">
+                        <center>
+                            <i class="fa fa-check"></i>
+                            The batch has been added successfully
+                        </center>
+                    </div>
+
+                    <button onclick="app.implementMe();">
+                        Configure the Batch
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
-
-
-
-
-
-
-
-
-
-
     </div>
-
-    </div>
-
-
-
-
-
 
 
     <div data-role="page" id="add_location_page">
@@ -298,59 +311,43 @@
                 <input type="text" name="nameLocation" value="" id="nameLocation">
                 <br> Location ID
                 <br>
-                <input type="text" name="location_ID" value="" id="location_ID">
+                <input type="text" name="locationID" value="" id="locationID">
                 <br> Warehouse ID
                 <br>
-                <input type="text" name="warehouse_ID" value="" id="warehouse_ID" disabled>
+                <input type="text" name="warehouseID" value="" id="warehouseID" class="warehouseID" disabled>
 
 
             </form>
 
             <div class="ul-content" role="main">
-                <div class="defaultAdd" id="addLocation_default">
+
+                <div id="addLocationDefault" class="defaultAdd">
                     <button onclick="app.addLocation();">
                         Add
                     </button>
 
-                    <a href="#configure_location_page" data-transition="slide">
-                        <button> Add and Configure
-                        </button>
-                    </a>
+                    <button onclick="app.implementMe();">
+                        Add and Configure
+                    </button>
                 </div>
-                <div id="addLocation_response" hidden class="successResponse">
-                    <br> Location Added Suuccessfully
-               
 
-                    <a href="#configure_location_page" data-transition="slide">
-                        <button> Configure Location
-                        </button>
-                    </a>
+                <div id="addLocationResponse" class="successResponse" hidden>
+                    <div class="successBox">
+                        <center>
+                            <i class="fa fa-check"></i>
+                            The location has been added successfully
+                        </center>
+                    </div>
+
+                    <button onclick="app.implementMe();">
+                        Configure location
+                    </button>
                 </div>
-                
-
 
             </div>
 
         </div>
-
-
-
-
-
-
     </div>
-
-    </div>
-
-
-
-
-
-
-
-
-
-
 
 
     <div data-role="page" id="configure_location_page">
@@ -363,20 +360,36 @@
             <form>
                 <br> Location ID
                 <br>
-                <input type="text" name="location_id_location" value="">
+                <input type="text" name="locationidConfigure" id="locationConfigure" value="">
                 <br> Warehouse ID
                 <br>
-                <input type="text" name="location_id_warehouse" value="" disabled>
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
 
             </form>
         </div>
         <div class="ul-content" role="main">
-            <a href="#configure_location" data-transition="slide">
-                <button>
+            <div id="verifyLocationDefault" class="defaultAdd">
+
+                <button onclick="app.implementMe();">
                     Verify
                 </button>
-            </a>
 
+            </div>
+
+            <div id="verifyLocationResponse" class="successResponse" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        The Location is in the DB
+                    </center>
+                </div>
+
+                <button onclick="app.implementMe();">
+                    Configure the Location
+                </button>
+
+            </div>
         </div>
     </div>
 
@@ -392,22 +405,41 @@
             <form>
                 <br> Batch ID
                 <br>
-                <input type="text" name="batch_id" value="">
+                <input type="text" name="configurationBatchID" id="configurationBatchID" value="">
                 <br> Warehouse ID
                 <br>
-                <input type="text" name="batch_id" value="" disabled>
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
 
             </form>
 
         </div>
         <div class="ul-content" role="main">
-            <a href="#configure_equipment" data-transition="slide">
-                <button>
+
+            <div id="verifyBatchDefault" class="defaultAdd">
+
+                <button onclick="app.implementMe();">
                     Verify
                 </button>
-            </a>
+
+            </div>
+
+            <div id="verifyBatchResponse" class="successResponse" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        The Batch is in the DB
+                    </center>
+                </div>
+
+                <button onclick="app.implementMe();">
+                    Configure the Location
+                </button>
+
+            </div>
 
         </div>
+    </div>
 
 
 
@@ -415,35 +447,37 @@
 
 
 
-        <div data-role="page" id="lettura_page">
-            <div data-role="header" data-position="fixed">
-                <h1>Warehouse</h1>
-                <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
-            </div>
-            <div class="ul-content" role="main">
-                <h2>Hello User, here you che try the NFC read function</h2>
-                <div id="read_result"></div>
-                <div id="status_div"></div>
 
-            </div>
+
+    <div data-role="page" id="lettura_page">
+        <div data-role="header" data-position="fixed">
+            <h1>Warehouse</h1>
+            <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
         </div>
+        <div class="ul-content" role="main">
+            <h2>Hello User, here you che try the NFC read function</h2>
+            <div id="read_result"></div>
+            <div id="status_div"></div>
 
-        <div data-role="page" id="scrittura_page">
-            <div data-role="header">
-                <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
-                <h1>MS</h1>
-            </div>
-            <div role="main" class="ui-content">
-                <div id="write_div">OJust place a text here to try the NFC function</div>
-                <input type="text" id="write_text_input">
-                <div id="write_result"></div>
-                <div id="status_div"></div>
-            </div>
         </div>
+    </div>
 
-        <script>
-            $(document).ready(app.initialize);
-        </script>
+    <div data-role="page" id="scrittura_page">
+        <div data-role="header">
+            <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
+            <h1>MS</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <div id="write_div">OJust place a text here to try the NFC function</div>
+            <input type="text" id="write_text_input">
+            <div id="write_result"></div>
+            <div id="status_div"></div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(app.initialize);
+    </script>
 </body>
 
 </html>

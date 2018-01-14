@@ -80,9 +80,15 @@ var app = {
         messageDiv.innerHTML = message;
     },
 
+    displayClass: function (message, messageDivClass) {
+        var messageDiv = document.getElementsByClassName(messageDivClass);
+        messageDiv[0].innerHTML = message;
+    },
+
     /*
     clears the message div:
      */
+
     clearAll: function () {
         var messageReadDiv = document.getElementById("read_result");
         var messageWriteDiv = document.getElementById("write_result");
@@ -112,12 +118,50 @@ var app = {
         });
     },
 
-    navigateTo: function(location){
-        $.mobile.navigate('#'+location);
+    addUser: function () {
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://petprojects.altervista.org/SLEM/api/employee/new/',
+            data: JSON.stringify({
+                ID: $('#fiscalcode').val(),
+                name: $('#firstname').val(),
+                surname: $('#lastname').val(),
+                birthDate: $('#birthdate').val(),
+                roleID: $('#roleid').val(),
+                warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
+            }),
+            success: function (response) {
+                //app.display(response.status, "responde_add_div");
+                $("#addUserDefault").hide();
+                $("#addUserResponse").show();
+
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    },
+
+    navigateTo: function (location) {
+        $.mobile.navigate('#' + location);
         $('.defaultAdd').show();
         $('.successResponse').hide();
+    },
+
+    implementMe: function () {
+        x = document.getElementsByClassName("defaultAdd");  // Find the elements
+        for (var i = 0; i < x.length; i++) {
+            x[i].innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>You have to implement me</center></div>';    // Change the content
+        }
+        x = document.getElementsByClassName("warehouseID");  // Find the elements
+        for (var i = 0; i < x.length; i++) {
+            x[i].value = 'AAAAA';    // Change the content
+        }
+    },
+
+    prova: function () {
+        $("#addUserDefault").hide();
+        $("#addUserResponse").show();
     }
-
-
 
 };
