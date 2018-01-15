@@ -2,7 +2,8 @@ var app = {
     pages: {
         MAIN: "main_page",
         READ: "wh_page",
-        WRITE: "ms_page"
+        WRITE: "ms_page",
+        HOME: "home"
     },
 
     initialize: function () {
@@ -43,8 +44,18 @@ var app = {
         app.clearAll();
         app.onNfc = app.doNothingOnNfc;
 
-        app.display("NFC contact", "status_div");
-
+        switch (currentPage) {
+            case app.pages.HOME:
+                var tag = nfcEvent.tag;
+                var stringPayload = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
+                if (stringPayload == "alberto") {
+                    $('#homeMainContent').show();
+                    $('#homeLoginContent').hide();
+                }
+                break;
+            default:
+            //doNothing();
+        }
         if (currentPage === app.pages.READ) {
             var tag = nfcEvent.tag;
             var stringPayload = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
@@ -105,13 +116,9 @@ var app = {
                 name: $('#nameLocation').val(),
                 warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
             }),
-            error: function (returnval) {
-                document.getElementById(addLocationResponse).innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + returnval + '</center></div>';
-            },
-
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv='<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>'+ document.getElementById("addLocationDefault").innerHTML;
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addLocationDefault").innerHTML;
                     document.getElementById("addLocationDefault").innerHTML = newDiv;
 
                 } else {
@@ -139,12 +146,14 @@ var app = {
                 roleID: $('#roleid').val(),
                 warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
             }),
-
             success: function (response) {
-                //app.display(response.status, "responde_add_div");
-                $("#addUserDefault").hide();
-                $("#addUserResponse").show();
-
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                    document.getElementById("addUserDefault").innerHTML = newDiv;
+                } else {
+                    $("#addUserDefault").hide();
+                    $("#addUserResponse").show();
+                }
             },
             contentType: "application/json",
             dataType: 'json'
@@ -158,13 +167,13 @@ var app = {
     },
 
     implementMe: function () {
-        x = document.getElementsByClassName("defaultAdd");  // Find the elements
+        x = document.getElementsByClassName("defaultAdd");
         for (var i = 0; i < x.length; i++) {
-            x[i].innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>You have to implement me</center></div>';    // Change the content
+            x[i].innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>You have to implement me</center></div>';
         }
-        x = document.getElementsByClassName("warehouseID");  // Find the elements
+        x = document.getElementsByClassName("warehouseID");
         for (var i = 0; i < x.length; i++) {
-            x[i].value = 'AAAAA';    // Change the content
+            x[i].value = 'AAAAA';
         }
     },
 

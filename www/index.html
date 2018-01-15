@@ -31,24 +31,34 @@
 
         <div class="ul-content" role="main">
 
-            <a href="#wf_page" data-transition="slide">
-                <button>
-                    Workforce Manager
-                </button>
-            </a>
+            <div class="homeLoginContent" id="homeLoginContent" hidden>
+                <center>
+                    <div id="loader"></div>
+                    <h3>Please Identify Yourself...</h3>
+                </center>
+            </div>
 
-            <a href="#em_page" data-transition="slide">
-                <button>
-                    Equipment &amp; Materials Manager
-                </button>
-            </a>
+            <div class="homeMainContent" id="homeMainContent">
 
-            <a href="#wh_page" data-transition="slide">
-                <button>
-                    Warehouse Manager
-                </button>
-            </a>
+                <a href="#wf_page" data-transition="slide">
+                    <button>
+                        Workforce Manager
+                    </button>
+                </a>
 
+                <a href="#em_page" data-transition="slide">
+                    <button>
+                        Equipment &amp; Materials Manager
+                    </button>
+                </a>
+
+                <a href="#wh_page" data-transition="slide">
+                    <button>
+                        Warehouse Manager
+                    </button>
+                </a>
+
+            </div>
         </div>
 
 
@@ -171,7 +181,7 @@
         <div class="ul-content" role="main">
 
             <div id="addUserDefault" class="defaultAdd">
-                <button onclick="app.implementMe();">
+                <button onclick="app.addUser();">
                     Add
                 </button>
 
@@ -370,7 +380,7 @@
         <div class="ul-content" role="main">
             <div id="verifyLocationDefault" class="defaultAdd">
 
-                <button onclick="app.successSwap();">
+                <button onclick="app.implementMe();">
                     Verify
                 </button>
 
