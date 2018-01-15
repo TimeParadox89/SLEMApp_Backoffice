@@ -101,16 +101,24 @@ var app = {
             type: 'POST',
             url: 'http://petprojects.altervista.org/SLEM/api/location/new/',
             data: JSON.stringify({
-                locationID: $('#location_ID').val(),
+                locationID: $('#locationID').val(),
                 name: $('#nameLocation').val(),
                 warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
             }),
+            error: function (returnval) {
+                document.getElementById(addLocationResponse).innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + returnval + '</center></div>';
+            },
+
             success: function (response) {
+                if (response.status == "error") {
+                    newDiv='<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>'+ document.getElementById("addLocationDefault").innerHTML;
+                    document.getElementById("addLocationDefault").innerHTML = newDiv;
 
-                $("#addLocation_response").show();
-                $("#addLocation_default").hide();
+                } else {
+                    $("#addLocationResponse").show();
+                    $("#addLocationDefault").hide();
 
-
+                }
 
             },
             contentType: "application/json",
@@ -131,6 +139,7 @@ var app = {
                 roleID: $('#roleid').val(),
                 warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
             }),
+
             success: function (response) {
                 //app.display(response.status, "responde_add_div");
                 $("#addUserDefault").hide();
@@ -159,9 +168,9 @@ var app = {
         }
     },
 
-    prova: function () {
-        $("#addUserDefault").hide();
-        $("#addUserResponse").show();
+    successSwap: function () {
+        $(".defaultAdd").hide();
+        $(".successResponse").show();
     }
 
 };
