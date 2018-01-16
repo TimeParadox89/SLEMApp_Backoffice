@@ -34,7 +34,7 @@
             <div class="homeLoginContent" id="homeLoginContent">
                 <center>
                     <div id="loader"></div>
-                    <h3 onclick="app.getUser();">Please Identify Yourself...</h3>
+                    <h3 onclick="app.getUser('pieroangela','e70d8391-1317-4c8b-b9d0-16bde0f872d1');">Please Identify Yourself...</h3>
                 </center>
             </div>
 
@@ -263,14 +263,12 @@
             <form>
                 Product ID
                 <input type="text" name="productid" id="productid" value="">
-                <br> Warehouse ID
-                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="">
                 <br>Quantity
-                <input type="submit" name="quantity" id="quantity" value="">
+                <input type="text" name="quantity" id="quantity" value="">
                 <br>Location
                 <input type="text" name="batchLocation" id="batchLocation" value="">
-
-
+                <br> Warehouse ID
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
             </form>
 
             <div class="ul-content" role="main">

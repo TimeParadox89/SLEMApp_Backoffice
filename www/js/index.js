@@ -61,7 +61,7 @@ var app = {
             app.display("NFC read", "status_div");
         }
         else if (currentPage === app.pages.WRITE) {
-            var message = [];
+            var message = ["erennio", "cretino"];
 
             var inputValue = $("#write_text_input").val();
             record = ndef.textRecord(inputValue);
@@ -156,14 +156,14 @@ var app = {
         });
     },
 
-    getUser: function () {
+    getUser: function (userID,myWhID) {
 
         $.ajax({
             type: 'GET',
             url: 'http://petprojects.altervista.org/SLEM/api/employee/get/',
             data: {
-                ID: "pieroangela",
-                warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
+                ID: userID,
+                warehouseID: myWhID
             },
             success: function (response) {
                 if (response.status == "error") {
@@ -176,6 +176,7 @@ var app = {
                             //controlla se è ruolo amministratore accede altrimenti no
                             $('#homeMainContent').show();
                             $('#homeLoginContent').hide();
+                            app.setWarehouseID(myWhID);
                             break;
                         case app.pages.EMPVER:
                             //deve autorizzarmi a scrivere il braccialetto.
@@ -218,3 +219,21 @@ var app = {
     }
 
 };
+
+
+
+
+/* scrivere due righe nel nfc
+var message = [ ndef.textRecord("erennio"),ndef.textRecord("cretino")];
+        // write the record to the tag:
+        nfc.write(
+            message, // write the record itself to the tag
+            function () { // when complete, run app callback function:
+                app.display("tutto a posto ", "homeMainContent");
+            },
+            // app function runs if the write command fails:
+            function (reason) {
+                app.display("There was a problem " + reason, "homeMainContent");
+            }
+        );
+*/
