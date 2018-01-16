@@ -2,7 +2,8 @@ var app = {
     pages: {
         MAIN: "main_page",
         READ: "wh_page",
-        WRITE: "ms_page"
+        WRITE: "ms_page",
+        HOME: "home"
     },
 
     initialize: function () {
@@ -40,11 +41,18 @@ var app = {
      */
     onNfc: function (nfcEvent) {
         var currentPage = $.mobile.activePage.attr('id');
-        app.clearAll();
         app.onNfc = app.doNothingOnNfc;
 
-        app.display("NFC contact", "status_div");
-
+        switch (currentPage) {
+            case app.pages.HOME:
+                var tag = nfcEvent.tag;
+                var managerID = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
+                var myWarehouseID = ndef.textHelper.decodePayload(tag.ndefMessage[1].payload);
+                getUser(managerID,myWarehouseID);
+                break;
+            default:
+            //doNothing();
+        }
         if (currentPage === app.pages.READ) {
             var tag = nfcEvent.tag;
             var stringPayload = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
@@ -107,13 +115,12 @@ var app = {
             }),
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv='<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>'+ document.getElementById("addLocationDefault").innerHTML;
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addLocationDefault").innerHTML;
                     document.getElementById("addLocationDefault").innerHTML = newDiv;
 
                 } else {
                     $("#addLocationResponse").show();
                     $("#addLocationDefault").hide();
-
                 }
 
             },
@@ -149,6 +156,37 @@ var app = {
         });
     },
 
+    getUser: function (userID, myWarehouseID) {
+        var name = "";
+        $.ajax({
+            type: 'POST',
+            url: 'http://petprojects.altervista.org/SLEM/api/employee/new/',
+            data: JSON.stringify({
+                ID: "pieroangela",
+                warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
+            }),
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("homeLoginContent").innerHTML;
+                    document.getElementById("homeLoginContent").innerHTML = newDiv;
+                } else {
+                    var currentPage = $.mobile.activePage.attr('id');
+                    app.onNfc = app.doNothingOnNfc;
+
+                    switch (currentPage) {
+                        case app.pages.HOME:
+                            document.getElementById("homeMainContent").innerHTML = response.data.name;
+                            break;
+                        default:
+                        //doNothing();
+                    }
+                }
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    },
+
     navigateTo: function (location) {
         $.mobile.navigate('#' + location);
         $('.defaultAdd').show();
@@ -169,6 +207,13 @@ var app = {
     successSwap: function () {
         $(".defaultAdd").hide();
         $(".successResponse").show();
+    },
+
+    setWarehouseID: function (whid) {
+        x = document.getElementsByClassName("warehouseID");
+        for (var i = 0; i < x.length; i++) {
+            x[i].value = whid;
+        }
     }
 
 };

@@ -3,7 +3,8 @@ var app = {
         MAIN: "main_page",
         READ: "wh_page",
         WRITE: "ms_page",
-        HOME: "home"
+        HOME: "home",
+        EMPVER: "configure_bracelet_page"
     },
 
     initialize: function () {
@@ -48,7 +49,7 @@ var app = {
                 var tag = nfcEvent.tag;
                 var managerID = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
                 var myWarehouseID = ndef.textHelper.decodePayload(tag.ndefMessage[1].payload);
-                getUser(managerID,myWarehouseID);
+                app.getUser(managerID, myWarehouseID);
                 break;
             default:
             //doNothing();
@@ -130,7 +131,6 @@ var app = {
     },
 
     addUser: function () {
-
         $.ajax({
             type: 'POST',
             url: 'http://petprojects.altervista.org/SLEM/api/employee/new/',
@@ -156,34 +156,35 @@ var app = {
         });
     },
 
-    getUser: function (userID, myWarehouseID) {
-        var name = "";
+    getUser: function () {
+
         $.ajax({
-            type: 'POST',
-            url: 'http://petprojects.altervista.org/SLEM/api/employee/new/',
-            data: JSON.stringify({
+            type: 'GET',
+            url: 'http://petprojects.altervista.org/SLEM/api/employee/get/',
+            data: {
                 ID: "pieroangela",
                 warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
-            }),
+            },
             success: function (response) {
                 if (response.status == "error") {
                     newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("homeLoginContent").innerHTML;
                     document.getElementById("homeLoginContent").innerHTML = newDiv;
                 } else {
                     var currentPage = $.mobile.activePage.attr('id');
-                    app.onNfc = app.doNothingOnNfc;
-
                     switch (currentPage) {
                         case app.pages.HOME:
-                            document.getElementById("homeMainContent").innerHTML = response.data.name;
+                            //controlla se è ruolo amministratore accede altrimenti no
+                            $('#homeMainContent').show();
+                            $('#homeLoginContent').hide();
+                            break;
+                        case app.pages.EMPVER:
+                            //deve autorizzarmi a scrivere il braccialetto.
                             break;
                         default:
                         //doNothing();
                     }
                 }
-            },
-            contentType: "application/json",
-            dataType: 'json'
+            }
         });
     },
 
