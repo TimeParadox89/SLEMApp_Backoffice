@@ -216,6 +216,8 @@ var app = {
         for (var i = 0; i < x.length; i++) {
             x[i].value = whid;
         }
+
+        document.getElementById("helloMr").innerHTML += "Hello, Angela";
     }
     
 };
