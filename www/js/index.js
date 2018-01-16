@@ -206,9 +206,9 @@ var app = {
         }
     },
 
-    successSwap: function () {
-        $(".defaultAdd").hide();
-        $(".successResponse").show();
+    swapDivByClass: function (div1,div2) {
+        $("."+div1).hide();
+        $("."+div2).show();
     },
 
     setWarehouseID: function (whid) {
@@ -217,7 +217,7 @@ var app = {
             x[i].value = whid;
         }
     }
-
+    
 };
 
 

@@ -229,3 +229,15 @@ form {
       font-weight: 300;
       font-style: italic;
   }
+
+  #addUserConfiguration #loader{
+    width: 40px;
+    height: 40px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #324a5d;
+  }
+
+  #addUserConfiguration h3{
+    font-weight: 300;
+    font-style: italic;
+}
