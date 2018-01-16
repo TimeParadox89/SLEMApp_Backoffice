@@ -224,7 +224,7 @@ var app = {
 
 
 /* scrivere due righe nel nfc
-var message = [ ndef.textRecord("erennio"),ndef.textRecord("cretino")];
+var message = [ ndef.textRecord("parola uno"),ndef.textRecord("parola due")];
         // write the record to the tag:
         nfc.write(
             message, // write the record itself to the tag
