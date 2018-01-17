@@ -237,7 +237,7 @@
         <div class="fieldContainer">
             <form>
                 Fiscal Code:
-                <input type="text" name="fiscalcodeVerify">
+                <input type="text" name="fiscalcodeVerify" id="fiscalcodeVerify">
                 <br> Warehouse ID:
                 <input type="text" name="warehouseID" class="warehouseID" disabled>
             </form>
@@ -247,7 +247,7 @@
 
             <div id="verifyUserDefault" class="defaultAdd">
 
-                <button onclick="app.implementMe();">
+                <button onclick="app.verifyUser();">
                     Verify
                 </button>
 
@@ -326,7 +326,7 @@
 
     <div data-role="page" id="add_location_page">
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1>Warehouse Manager</h1>
+            <h1 onclick="app.disableInput();">Warehouse Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
         </div>
 
@@ -337,7 +337,7 @@
                 <input type="text" name="nameLocation" value="" id="nameLocation">
                 <br> Location ID
                 <br>
-                <input type="text" name="locationID" value="" id="locationID">
+                <input type="text" name="locationID" value="" id="locationID" id="locationIDVerify">
                 <br> Warehouse ID
                 <br>
                 <input type="text" name="warehouseID" value="" id="warehouseID" class="warehouseID" disabled>
@@ -386,7 +386,7 @@
             <form>
                 <br> Location ID
                 <br>
-                <input type="text" name="locationidConfigure" id="locationConfigure" value="">
+                <input type="text" name="locationIDVerify" id="locationIDVerify" value="">
                 <br> Warehouse ID
                 <br>
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
@@ -396,13 +396,13 @@
         <div class="ul-content" role="main">
             <div id="verifyLocationDefault" class="defaultAdd">
 
-                <button onclick="app.implementMe();">
+                <button onclick="app.verifyLocation();">
                     Verify
                 </button>
 
             </div>
 
-            <div id="verifyLocationResponse" class="successResponse" hidden>
+            <div id="verifyLocationResponse" class="successResponse" hidden >
 
                 <div class="successBox">
                     <center>

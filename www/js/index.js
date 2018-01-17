@@ -5,7 +5,9 @@ var app = {
         WRITE: "ms_page",
         HOME: "home",
         EMPVER: "configure_bracelet_page",
-        ADDUSER: "add_employee_page"
+        ADDUSER: "add_employee_page",
+        ADDLOCATION: "add_location_page",
+        CONFLOCATION: "configure_location_page"
     },
 
     initialize: function () {
@@ -60,34 +62,7 @@ var app = {
             default:
             //doNothing();
         }
-        if (currentPage === app.pages.READ) {
-            var tag = nfcEvent.tag;
-            var stringPayload = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
-            app.display("You have read: " + stringPayload, "read_result");
-            app.display("NFC read", "status_div");
-        }
-        else if (currentPage === app.pages.WRITE) {
-            var message = ["erennio", "cretino"];
 
-            var inputValue = $("#write_text_input").val();
-            record = ndef.textRecord(inputValue);
-
-            // put the record in the message array:
-            message.push(record);
-            app.display("NFC write", "status_div");
-
-            // write the record to the tag:
-            nfc.write(
-                message, // write the record itself to the tag
-                function () { // when complete, run app callback function:
-                    app.display("Wrote '" + inputValue + "' to tag.", "write_result"); // write to the message div
-                },
-                // app function runs if the write command fails:
-                function (reason) {
-                    app.display("There was a problem " + reason, "write_result");
-                }
-            );
-        }
     },
 
     display: function (message, messageDivId) {
@@ -128,6 +103,7 @@ var app = {
                 } else {
                     $("#addLocationResponse").show();
                     $("#addLocationDefault").hide();
+                    app.disableInput();
                 }
 
             },
@@ -147,23 +123,12 @@ var app = {
             },
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("homeLoginContent").innerHTML;
-                    document.getElementById("homeLoginContent").innerHTML = newDiv;
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    document.getElementById("verifyLocationDefault").innerHTML = newDiv;
                 } else {
-                    var currentPage = $.mobile.activePage.attr('id');
-                    switch (currentPage) {
-                        case app.pages.HOME:
-                            //controlla se è ruolo amministratore accede altrimenti no
-                            $('#homeMainContent').show();
-                            $('#homeLoginContent').hide();
-                            app.setWarehouseID(WhID);
-                            break;
-                        case app.pages.EMPVER:
-                            //deve autorizzarmi a scrivere il braccialetto.
-                            break;
-                        default:
-                        //doNothing();
-                    }
+                    $("#verifyLocationDefault").hide();
+                    $("#verifyLocationResponse").show();
+                    
                 }
             }
         });
@@ -198,10 +163,13 @@ var app = {
             contentType: "application/json",
             dataType: 'json'
         });
+
     },
 
-    getUser: function (userID, myWhID) {
 
+    getUser: function (userID, myWhID) {
+        newDiv = "CACCHIO";
+        document.getElementById("homeLoginContent").innerHTML = newDiv;
         $.ajax({
             type: 'GET',
             url: 'http://petprojects.altervista.org/SLEM/api/employee/get/',
@@ -223,6 +191,9 @@ var app = {
                             app.setWarehouseID(myWhID);
                             break;
                         case app.pages.EMPVER:
+                            $("#verifyUserDefault").hide();
+                            $("#verifyUserResponse").show();
+
                             //deve autorizzarmi a scrivere il braccialetto.
                             break;
                         default:
@@ -260,6 +231,14 @@ var app = {
         document.getElementById("helloMr").innerHTML += "Hello, Angela";
     },
 
+    verifyUser: function () {
+        app.getUser($('#fiscalcodeVerify').val(), $('#warehouseID').val());
+    },
+
+    verifyLocation: function () {
+        app.getLocation($('#locationIDVerify').val(), $('#warehouseID').val());
+    },
+
     disableInput: function () {
         var currentPage = $.mobile.activePage.attr('id');
 
@@ -276,6 +255,13 @@ var app = {
                 document.getElementById('roleid').setAttribute("disabled", "disabled");
                 $("#roleid").parent().addClass("ui-state-disabled");
                 break;
+            case app.pages.ADDLOCATION:
+                document.getElementById('nameLocation').setAttribute("disabled", "disabled");
+                $("#nameLocation").parent().addClass("ui-state-disabled");
+                document.getElementById('locationID').setAttribute("disabled", "disabled");
+                $("#locationID").parent().addClass("ui-state-disabled");
+                break;
+
             default:
                 break;
         }
@@ -297,6 +283,12 @@ var app = {
                 document.getElementById('roleid').removeAttribute("disabled")
                 $("#roleid").parent().removeClass("ui-state-disabled");
                 break;
+            case app.pages.ADDLOCATION:
+                document.getElementById('nameLocation').removeAttribute("disabled");
+                $("#nameLocation").parent().removeClass("ui-state-disabled");
+                document.getElementById('locationID').removeAttribute("disabled")
+                $("#locationID").parent().removeClass("ui-state-disabled");
+                break;
             default:
                 break;
         }
@@ -312,28 +304,15 @@ var app = {
                 $("#fiscalcode").val("");
                 $("#roleid").val("");
                 break;
+            case app.pages.ADDLOCATION:
+                $("#nameLocation").val("");
+                $("#locationID").val("");
+                break;
             default:
                 break;
         }
 
+
     }
 
 };
-
-
-
-
-/* scrivere due righe nel nfc
-var message = [ ndef.textRecord("parola uno"),ndef.textRecord("parola due")];
-        // write the record to the tag:
-        nfc.write(
-            message, // write the record itself to the tag
-            function () { // when complete, run app callback function:
-                app.display("tutto a posto ", "homeMainContent");
-            },
-            // app function runs if the write command fails:
-            function (reason) {
-                app.display("There was a problem " + reason, "homeMainContent");
-            }
-        );
-*/
