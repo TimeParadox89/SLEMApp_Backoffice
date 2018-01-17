@@ -4,7 +4,8 @@ var app = {
         READ: "wh_page",
         WRITE: "ms_page",
         HOME: "home",
-        EMPVER: "configure_bracelet_page"
+        EMPVER: "configure_bracelet_page",
+        ADDUSER: "add_employee_page"
     },
 
     initialize: function () {
@@ -50,6 +51,11 @@ var app = {
                 var managerID = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
                 var myWarehouseID = ndef.textHelper.decodePayload(tag.ndefMessage[1].payload);
                 app.getUser(managerID, myWarehouseID);
+                break;
+            case app.pages.ADDUSER:
+                if ($("#addUserConfiguration").is(":visible")) {
+                    //app.writeToNFC();
+                }
                 break;
             default:
             //doNothing();
@@ -130,6 +136,39 @@ var app = {
         });
     },
 
+    getLocation: function (locID, WhID) {
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://petprojects.altervista.org/SLEM/api/location/get/',
+            data: {
+                locationID: locID,
+                warehouseID: WhID
+            },
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("homeLoginContent").innerHTML;
+                    document.getElementById("homeLoginContent").innerHTML = newDiv;
+                } else {
+                    var currentPage = $.mobile.activePage.attr('id');
+                    switch (currentPage) {
+                        case app.pages.HOME:
+                            //controlla se è ruolo amministratore accede altrimenti no
+                            $('#homeMainContent').show();
+                            $('#homeLoginContent').hide();
+                            app.setWarehouseID(WhID);
+                            break;
+                        case app.pages.EMPVER:
+                            //deve autorizzarmi a scrivere il braccialetto.
+                            break;
+                        default:
+                        //doNothing();
+                    }
+                }
+            }
+        });
+    },
+
     addUser: function () {
         $.ajax({
             type: 'POST',
@@ -140,7 +179,7 @@ var app = {
                 surname: $('#lastname').val(),
                 birthDate: $('#birthdate').val(),
                 roleID: $('#roleid').val(),
-                warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
+                warehouseID: $('#warehouseID').val()
             }),
             success: function (response) {
                 if (response.status == "error") {
@@ -149,14 +188,19 @@ var app = {
                 } else {
                     $("#addUserDefault").hide();
                     $("#addUserResponse").show();
+                    app.disableInput(app.pages.ADDUSER);
                 }
+            },
+            error: function (response) {
+                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "sto in error" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
             dataType: 'json'
         });
     },
 
-    getUser: function (userID,myWhID) {
+    getUser: function (userID, myWhID) {
 
         $.ajax({
             type: 'GET',
@@ -200,15 +244,11 @@ var app = {
         for (var i = 0; i < x.length; i++) {
             x[i].innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>You have to implement me</center></div>';
         }
-        x = document.getElementsByClassName("warehouseID");
-        for (var i = 0; i < x.length; i++) {
-            x[i].value = 'AAAAA';
-        }
     },
 
-    swapDivByClass: function (div1,div2) {
-        $("."+div1).hide();
-        $("."+div2).show();
+    swapDivByClass: function (div1, div2) {
+        $("." + div1).hide();
+        $("." + div2).show();
     },
 
     setWarehouseID: function (whid) {
@@ -218,8 +258,66 @@ var app = {
         }
 
         document.getElementById("helloMr").innerHTML += "Hello, Angela";
+    },
+
+    disableInput: function () {
+        var currentPage = $.mobile.activePage.attr('id');
+
+        switch (currentPage) {
+            case app.pages.ADDUSER:
+                document.getElementById('firstname').setAttribute("disabled", "disabled");
+                $("#firstname").parent().addClass("ui-state-disabled");
+                document.getElementById('lastname').setAttribute("disabled", "disabled");
+                $("#lastname").parent().addClass("ui-state-disabled");
+                document.getElementById('birthdate').setAttribute("disabled", "disabled");
+                $("#birthdate").parent().addClass("ui-state-disabled");
+                document.getElementById('fiscalcode').setAttribute("disabled", "disabled");
+                $("#fiscalcode").parent().addClass("ui-state-disabled");
+                document.getElementById('roleid').setAttribute("disabled", "disabled");
+                $("#roleid").parent().addClass("ui-state-disabled");
+                break;
+            default:
+                break;
+        }
+    },
+
+    enableInput: function () {
+        var currentPage = $.mobile.activePage.attr('id');
+
+        switch (currentPage) {
+            case app.pages.ADDUSER:
+                document.getElementById('firstname').removeAttribute("disabled");
+                $("#firstname").parent().removeClass("ui-state-disabled");
+                document.getElementById('lastname').removeAttribute("disabled")
+                $("#lastname").parent().removeClass("ui-state-disabled");
+                document.getElementById('birthdate').removeAttribute("disabled")
+                $("#birthdate").parent().removeClass("ui-state-disabled");
+                document.getElementById('fiscalcode').removeAttribute("disabled")
+                $("#fiscalcode").parent().removeClass("ui-state-disabled");
+                document.getElementById('roleid').removeAttribute("disabled")
+                $("#roleid").parent().removeClass("ui-state-disabled");
+                break;
+            default:
+                break;
+        }
+    },
+
+    clearInput: function (nextPage) {
+
+        switch (nextPage) {
+            case app.pages.ADDUSER:
+                $("#firstname").val("");
+                $("#lastname").val("");
+                $("#birthdate").val("");
+                $("#fiscalcode").val("");
+                $("#roleid").val("");
+                break;
+            default:
+                break;
+        }
+
     }
-    
+
 };
 
 
