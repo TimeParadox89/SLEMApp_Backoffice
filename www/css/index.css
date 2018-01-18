@@ -238,14 +238,14 @@ form {
     font-style: italic;
 }
 
-#addUserConfiguration #loader {
+#addUserConfiguration #loader, #write_order_loader #loader {
     width: 40px;
     height: 40px;
     border: 6px solid #f3f3f3;
     border-top: 6px solid #324a5d;
 }
 
-#addUserConfiguration h3 {
+#addUserConfiguration h3, #write_order_loader h3 {
     font-weight: 300;
     font-style: italic;
 }
@@ -256,3 +256,5 @@ span#helloMr {
     right: .4em;
     text-transform: initial
 }
+
+

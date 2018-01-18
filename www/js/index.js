@@ -112,6 +112,31 @@ var app = {
         });
     },
 
+    addBatch: function () {
+        $.ajax({
+            type: 'POST',
+            url: 'INSERIRE L?URL DAL DATABASE',
+            data: JSON.stringify({
+                productID: $('#productid').val(),
+                quantity: $('#quantity').val(),
+                location: $('#batchLocation').val(),
+                warehouseID: "INSERIRE DAL DBBBBBBBBBBBBBBBB"
+            }),
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addBatchDefault").innerHTML;
+                    document.getElementById("addBatchDefault").innerHTML = newDiv;
+                } else {
+                    $("addBatchResponse").show();
+                    $("addBatchDefault").hide();
+                    app.disableInput();
+                }
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    },
+
     getLocation: function (locID, WhID) {
 
         $.ajax({
@@ -128,8 +153,31 @@ var app = {
                 } else {
                     $("#verifyLocationDefault").hide();
                     $("#verifyLocationResponse").show();
-                    
+
                 }
+            }
+        });
+    },
+
+    getBatch: function (prodID, whId) {
+        $.ajax({
+            type: 'GET',
+            url: 'INSERIEEEEEEEEEEE',
+            data: {
+                productID: prodID,
+                warehouseID: whID
+            },
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyBatchDefault").innerHTML;
+                    document.getElementById("verifyBatchDefault").innerHTML = newDiv;
+                } else {
+                    $("#verifyBatchDefault").hide();
+                    $("#verifyBatchResponse").show();
+
+
+                }
+
             }
         });
     },
@@ -238,6 +286,8 @@ var app = {
     verifyLocation: function () {
         app.getLocation($('#locationIDVerify').val(), $('#warehouseID').val());
     },
+
+    
 
     disableInput: function () {
         var currentPage = $.mobile.activePage.attr('id');
