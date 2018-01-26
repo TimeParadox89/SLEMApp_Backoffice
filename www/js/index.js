@@ -56,7 +56,20 @@ var app = {
                 break;
             case app.pages.ADDUSER:
                 if ($("#addUserConfiguration").is(":visible")) {
-                    //app.writeToNFC();
+                    app.writeToNFC($('#fiscalcode').val(), $('#warehouseID').val());
+                }
+                break;
+            case app.pages.EMPVER:
+                if ($("#verifyUserResponse").is(":visible")) {
+                    app.writeToNFC($('#fiscalcodeSelect').find(":selected").val(), $('#warehouseID').val());
+                }
+                break;
+            case app.pages.ADDLOCATION:
+                //implementare bisogna aggiungere il campo locationID disabled, lo vado a modificare in fase di aggiunta con response.ID
+                break;
+            case app.pages.CONFLOCATION:
+                if ($("#verifyLocationResponse").is(":visible")) {
+                    app.writeToNFC($('#locationIDVerify').val(), $('#warehouseID').val());
                 }
                 break;
             default:
@@ -89,15 +102,13 @@ var app = {
     addLocation: function () {
         $.ajax({
             type: 'POST',
-            url: 'http://petprojects.altervista.org/SLEM/api/location/new/',
+            url: 'http://petprojects.altervista.org/' + $('#warehouseID').val() + '/location/',
             data: JSON.stringify({
-                locationID: $('#locationID').val(),
                 name: $('#nameLocation').val(),
-                warehouseID: "e70d8391-1317-4c8b-b9d0-16bde0f872d1"
             }),
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addLocationDefault").innerHTML;
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addLocationDefault").innerHTML;
                     document.getElementById("addLocationDefault").innerHTML = newDiv;
 
                 } else {
@@ -107,7 +118,67 @@ var app = {
                 }
 
             },
+            error: function (response) {
+                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                document.getElementById("addUserDefault").innerHTML = newDiv;
+            },
             contentType: "application/json",
+            accept: "application/json",
+            dataType: 'json'
+        });
+    },
+
+    getLocation: function (locID, WhID) {
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://petprojects.altervista.org/' + WhID + '/location/' + locID,
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    document.getElementById("verifyLocationDefault").innerHTML = newDiv;
+                } else {
+                    $("#verifyLocationDefault").hide();
+                    $("#verifyLocationResponse").show();
+                    app.disableInput();
+                }
+            },
+            error: function (response) {
+                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                document.getElementById("addUserDefault").innerHTML = newDiv;
+            },
+            contentType: "application/json",
+            accept: "application/json",
+            dataType: 'json'
+        });
+    },
+
+    getLocations: function () {
+        $.ajax({
+            type: 'GET',
+            url: 'http://petprojects.altervista.org/31814799-B4B5-4D67-B5F4-989245BD8DDD/location/list/', //' + $('#warehouseID').val() + '
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    document.getElementById("verifyLocationDefault").innerHTML = newDiv;
+                } else {
+                    var sel = document.getElementById('fiscalcodeSelect');
+                    var tmp = new Array();
+                    tmp = response;
+                    for (i = 0; i < tmp.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.innerHTML = tmp[i].ID;
+                        opt.value = tmp[i].ID;
+                        sel.appendChild(opt);
+                    }
+                }
+            },
+            error: function (response) {
+                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                document.getElementById("addUserDefault").innerHTML = newDiv;
+            },
+            contentType: "application/json",
+            accept: "application/json",
             dataType: 'json'
         });
     },
@@ -137,28 +208,6 @@ var app = {
         });
     },
 
-    getLocation: function (locID, WhID) {
-
-        $.ajax({
-            type: 'GET',
-            url: 'http://petprojects.altervista.org/SLEM/api/location/get/',
-            data: {
-                locationID: locID,
-                warehouseID: WhID
-            },
-            success: function (response) {
-                if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
-                    document.getElementById("verifyLocationDefault").innerHTML = newDiv;
-                } else {
-                    $("#verifyLocationDefault").hide();
-                    $("#verifyLocationResponse").show();
-
-                }
-            }
-        });
-    },
-
     getBatch: function (prodID, whId) {
         $.ajax({
             type: 'GET',
@@ -185,7 +234,7 @@ var app = {
     addUser: function () {
         $.ajax({
             type: 'POST',
-            url: 'http://petprojects.altervista.org/SLEM/api/employee/new/',
+            url: 'http://petprojects.altervista.org/employee/',
             data: JSON.stringify({
                 ID: $('#fiscalcode').val(),
                 name: $('#firstname').val(),
@@ -196,19 +245,20 @@ var app = {
             }),
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                     document.getElementById("addUserDefault").innerHTML = newDiv;
                 } else {
                     $("#addUserDefault").hide();
                     $("#addUserResponse").show();
-                    app.disableInput(app.pages.ADDUSER);
+                    app.disableInput();
                 }
             },
             error: function (response) {
-                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "sto in error" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                 document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
+            accept: "application/json",
             dataType: 'json'
         });
 
@@ -216,39 +266,69 @@ var app = {
 
 
     getUser: function (userID, myWhID) {
-        newDiv = "CACCHIO";
-        document.getElementById("homeLoginContent").innerHTML = newDiv;
         $.ajax({
             type: 'GET',
-            url: 'http://petprojects.altervista.org/SLEM/api/employee/get/',
-            data: {
-                ID: userID,
-                warehouseID: myWhID
+            url: 'http://petprojects.altervista.org/' + myWhID + '/employee/' + userID + '/',
+            error: function (xhr, data) {
+                if (xhr.status == 404) {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("homeLoginContent").innerHTML;
+                    document.getElementById("homeLoginContent").innerHTML = newDiv;
+                }
             },
             success: function (response) {
-                if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("homeLoginContent").innerHTML;
-                    document.getElementById("homeLoginContent").innerHTML = newDiv;
-                } else {
-                    var currentPage = $.mobile.activePage.attr('id');
-                    switch (currentPage) {
-                        case app.pages.HOME:
-                            //controlla se è ruolo amministratore accede altrimenti no
-                            $('#homeMainContent').show();
-                            $('#homeLoginContent').hide();
-                            app.setWarehouseID(myWhID);
-                            break;
-                        case app.pages.EMPVER:
-                            $("#verifyUserDefault").hide();
-                            $("#verifyUserResponse").show();
+                var currentPage = $.mobile.activePage.attr('id');
+                switch (currentPage) {
+                    case app.pages.HOME:
+                        //controlla se è ruolo amministratore accede altrimenti no
+                        $('#homeMainContent').show();
+                        $('#homeLoginContent').hide();
+                        document.getElementById("helloMr").innerHTML += "Hello, " + response.surname;
+                        document.getElementById("logoutButton").style.display = "block";
+                        app.setWarehouseID(myWhID);
+                        break;
+                    case app.pages.EMPVER:
+                        if ($("#verifyUserDefault").is(":visible")) {
+                            document.getElementById(userID).innerHTML = response.surname + " " + response.name;
+                        }
+                        break;
+                    default:
+                    //doNothing();
+                }
+            },
+            accept: "application/json",
+            dataType: 'json'
+        });
+    },
 
-                            //deve autorizzarmi a scrivere il braccialetto.
-                            break;
-                        default:
-                        //doNothing();
+    getUsers: function () {
+        $.ajax({
+            type: 'GET',
+            url: 'http://petprojects.altervista.org/' + $('#warehouseID').val() + '/employee/list/',
+            success: function (response) {
+                if (response.status == "error") {
+                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    document.getElementById("verifyLocationDefault").innerHTML = newDiv;
+                } else {
+                    var sel = document.getElementById('fiscalcodeSelect');
+                    var tmp = new Array();
+                    tmp = response;
+                    for (i = 0; i < tmp.length; i++) {
+                        var opt = document.createElement('option');
+                        //opt.innerHTML = tmp[i].ID;
+                        opt.id = tmp[i].ID;
+                        opt.value = tmp[i].ID;
+                        sel.appendChild(opt);
+                        app.getUser(tmp[i].ID, $('#warehouseID').val());
                     }
                 }
-            }
+            },
+            error: function (response) {
+                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                document.getElementById("addUserDefault").innerHTML = newDiv;
+            },
+            contentType: "application/json",
+            accept: "application/json",
+            dataType: 'json'
         });
     },
 
@@ -256,6 +336,17 @@ var app = {
         $.mobile.navigate('#' + location);
         $('.defaultAdd').show();
         $('.successResponse').hide();
+        app.enableInput(location);
+
+        switch (location) {
+            case app.pages.EMPVER:
+                app.getUsers();
+                break;
+            case app.pages.CONFLOCATION:
+                app.getLocationsList();
+                break;
+            default:
+        }
     },
 
     implementMe: function () {
@@ -275,19 +366,38 @@ var app = {
         for (var i = 0; i < x.length; i++) {
             x[i].value = whid;
         }
-
-        document.getElementById("helloMr").innerHTML += "Hello, Angela";
     },
 
-    verifyUser: function () {
-        app.getUser($('#fiscalcodeVerify').val(), $('#warehouseID').val());
+    enableWrite: function () {
+        var currentPage = $.mobile.activePage.attr('id');
+
+        switch (currentPage) {
+            case app.pages.EMPVER:
+                if ($('#fiscalcodeSelect').find(":selected").val() != "doNothing") {
+                    $("#verifyUserDefault").hide();
+                    $("#verifyUserResponse").show();
+                } else {
+                    alert("Select an employee");
+                }
+                break;
+            default:
+                break;
+        }
     },
 
     verifyLocation: function () {
         app.getLocation($('#locationIDVerify').val(), $('#warehouseID').val());
     },
 
-    
+    logout: function () {
+        $('#homeMainContent').hide();
+        $('#homeLoginContent').show();
+        document.getElementById("helloMr").innerHTML = "";
+        document.getElementById("logoutButton").style.display = "none";
+        app.setWarehouseID("");
+    },
+
+
 
     disableInput: function () {
         var currentPage = $.mobile.activePage.attr('id');
@@ -311,14 +421,18 @@ var app = {
                 document.getElementById('locationID').setAttribute("disabled", "disabled");
                 $("#locationID").parent().addClass("ui-state-disabled");
                 break;
-
+            case app.pages.CONFLOCATION:
+                document.getElementById('locationIDVerify').setAttribute("disabled", "disabled");
+                $("#locationIDVerify").parent().addClass("ui-state-disabled");
+                break;
             default:
                 break;
         }
     },
 
-    enableInput: function () {
-        var currentPage = $.mobile.activePage.attr('id');
+    enableInput: function (currentPage) {
+
+        app.clearInput(currentPage);
 
         switch (currentPage) {
             case app.pages.ADDUSER:
@@ -339,6 +453,10 @@ var app = {
                 document.getElementById('locationID').removeAttribute("disabled")
                 $("#locationID").parent().removeClass("ui-state-disabled");
                 break;
+            case app.pages.CONFLOCATION:
+                document.getElementById('locationIDVerify').removeAttribute("disabled")
+                $("#locationIDVerify").parent().removeClass("ui-state-disabled");
+                break;
             default:
                 break;
         }
@@ -358,11 +476,29 @@ var app = {
                 $("#nameLocation").val("");
                 $("#locationID").val("");
                 break;
+            case app.pages.EMPVER:
+                document.getElementById("fiscalcodeSelect").innerHTML = '<option value="doNothing" selected> -- Select an Employee -- </option>';
+                break;
             default:
                 break;
         }
 
 
+    },
+
+    writeToNFC: function (value1, value2) {
+        var message = [value1, value2];
+        // write the record to the tag:
+        nfc.write(
+            message, // write the record itself to the tag
+            function () { // when complete, run app callback function:
+                alert("Device scritto correttamente");
+            },
+            // app function runs if the write command fails:
+            function (reason) {
+                alert("There is a problem: " + reason);
+            }
+        );
     }
 
 };

@@ -238,14 +238,14 @@ form {
     font-style: italic;
 }
 
-#addUserConfiguration #loader, #write_order_loader #loader {
+.configurationBox #loader {
     width: 40px;
     height: 40px;
     border: 6px solid #f3f3f3;
     border-top: 6px solid #324a5d;
 }
 
-#addUserConfiguration h3, #write_order_loader h3 {
+.configurationBox h3 {
     font-weight: 300;
     font-style: italic;
 }
@@ -257,4 +257,10 @@ span#helloMr {
     text-transform: initial
 }
 
+.ui-header .logoutButton {
+    padding: .4em 1em !important;
+}
 
+.ui-header .logoutButton .logoutText {
+    font-size: 10px !important;
+}
