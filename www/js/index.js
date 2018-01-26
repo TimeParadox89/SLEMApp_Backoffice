@@ -106,9 +106,15 @@ var app = {
             data: JSON.stringify({
                 name: $('#nameLocation').val(),
             }),
+            error: function (xhr, data) {
+                if (xhr.status == 404) {
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("homeLoginContent").innerHTML;
+                    document.getElementById("homeLoginContent").innerHTML = newDiv;
+                }
+            },
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addLocationDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addLocationDefault").innerHTML;
                     document.getElementById("addLocationDefault").innerHTML = newDiv;
 
                 } else {
@@ -117,10 +123,6 @@ var app = {
                     app.disableInput();
                 }
 
-            },
-            error: function (response) {
-                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
-                document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
             accept: "application/json",
@@ -135,7 +137,7 @@ var app = {
             url: 'http://petprojects.altervista.org/' + WhID + '/location/' + locID,
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
                     document.getElementById("verifyLocationDefault").innerHTML = newDiv;
                 } else {
                     $("#verifyLocationDefault").hide();
@@ -144,7 +146,7 @@ var app = {
                 }
             },
             error: function (response) {
-                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                 document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
@@ -159,7 +161,7 @@ var app = {
             url: 'http://petprojects.altervista.org/31814799-B4B5-4D67-B5F4-989245BD8DDD/location/list/', //' + $('#warehouseID').val() + '
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
                     document.getElementById("verifyLocationDefault").innerHTML = newDiv;
                 } else {
                     var sel = document.getElementById('fiscalcodeSelect');
@@ -174,7 +176,7 @@ var app = {
                 }
             },
             error: function (response) {
-                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                 document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
@@ -195,7 +197,7 @@ var app = {
             }),
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addBatchDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addBatchDefault").innerHTML;
                     document.getElementById("addBatchDefault").innerHTML = newDiv;
                 } else {
                     $("addBatchResponse").show();
@@ -218,7 +220,7 @@ var app = {
             },
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyBatchDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyBatchDefault").innerHTML;
                     document.getElementById("verifyBatchDefault").innerHTML = newDiv;
                 } else {
                     $("#verifyBatchDefault").hide();
@@ -245,7 +247,7 @@ var app = {
             }),
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                     document.getElementById("addUserDefault").innerHTML = newDiv;
                 } else {
                     $("#addUserDefault").hide();
@@ -254,7 +256,7 @@ var app = {
                 }
             },
             error: function (response) {
-                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                 document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
@@ -271,7 +273,7 @@ var app = {
             url: 'http://petprojects.altervista.org/' + myWhID + '/employee/' + userID + '/',
             error: function (xhr, data) {
                 if (xhr.status == 404) {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("homeLoginContent").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("homeLoginContent").innerHTML;
                     document.getElementById("homeLoginContent").innerHTML = newDiv;
                 }
             },
@@ -306,7 +308,7 @@ var app = {
             url: 'http://petprojects.altervista.org/' + $('#warehouseID').val() + '/employee/list/',
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
                     document.getElementById("verifyLocationDefault").innerHTML = newDiv;
                 } else {
                     var sel = document.getElementById('fiscalcodeSelect');
@@ -323,7 +325,7 @@ var app = {
                 }
             },
             error: function (response) {
-                newDiv = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
                 document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
@@ -334,8 +336,6 @@ var app = {
 
     navigateTo: function (location) {
         $.mobile.navigate('#' + location);
-        $('.defaultAdd').show();
-        $('.successResponse').hide();
         app.enableInput(location);
 
         switch (location) {
@@ -352,7 +352,7 @@ var app = {
     implementMe: function () {
         x = document.getElementsByClassName("defaultAdd");
         for (var i = 0; i < x.length; i++) {
-            x[i].innerHTML = '<div class="errorBox"><center><i class="fa fa-times-circle"></i>You have to implement me</center></div>';
+            x[i].innerHTML = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>You have to implement me</center></div>';
         }
     },
 
@@ -463,6 +463,8 @@ var app = {
     },
 
     clearInput: function (nextPage) {
+        var errorBox = document.getElementById('errorBox');
+        if ( errorBox != null) errorBox.parentNode.removeChild(errorBox);
 
         switch (nextPage) {
             case app.pages.ADDUSER:
@@ -471,10 +473,15 @@ var app = {
                 $("#birthdate").val("");
                 $("#fiscalcode").val("");
                 $("#roleid").val("");
+                $('#addUserDefault').show();
+                $('#addUserResponse').hide();
                 break;
             case app.pages.ADDLOCATION:
                 $("#nameLocation").val("");
                 $("#locationID").val("");
+                $('#addLocationDefault').show();
+                $('#addLocationResponse').hide();
+                $('#addLocationConfiguration').hide();
                 break;
             case app.pages.EMPVER:
                 document.getElementById("fiscalcodeSelect").innerHTML = '<option value="doNothing" selected> -- Select an Employee -- </option>';

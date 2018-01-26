@@ -333,9 +333,11 @@
                     Add
                 </button>
 
+                <!--
                 <button onclick="app.implementMe();">
                     Add and Configure a bracelet
                 </button>
+            -->
             </div>
             <div id="addUserResponse" class="successResponse" hidden>
 
@@ -447,11 +449,11 @@
                     <button onclick="app.implementMe();">
                         Add
                     </button>
-
+                    <!--
                     <button onclick="app.implementMe();">
                         Add and Configure
                     </button>
-
+                -->
                 </div>
 
                 <div id="addBatchResponse" class="successResponse" hidden>
@@ -497,10 +499,11 @@
                     <button onclick="app.addLocation();">
                         Add
                     </button>
-
-                    <button onclick="app.implementMe();">
+                    <!--
+                    <button onclick="app.addAndConfigure();">
                         Add and Configure
                     </button>
+-->
                 </div>
 
                 <div id="addLocationResponse" class="successResponse" hidden>
@@ -511,9 +514,27 @@
                         </center>
                     </div>
 
-                    <button onclick="app.implementMe();">
-                        Configure location
+                    <button onclick="app.swapDivByClass('successResponse','addLocationConfiguration');">
+                        Configure a Bracelet
                     </button>
+
+                </div>
+
+                <div id="addLocationConfiguration" class="addLocationConfiguration configurationBox" hidden>
+
+                    <div class="successBox">
+                        <center>
+                            <i class="fa fa-check"></i>
+                            The location has been added successfully
+                        </center>
+                    </div>
+
+                    <center>
+                        <div id="loader"></div>
+
+                        <h3>Please touch the nfc to write</h3>
+                    </center>
+
                 </div>
 
             </div>
