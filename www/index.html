@@ -39,7 +39,7 @@
             <div class="homeLoginContent" id="homeLoginContent">
                 <center>
                     <div id="loader"></div>
-                    <h3 onclick="app.getUser('pieroangela','31814799-B4B5-4D67-B5F4-989245BD8DDD');">Please Identify Yourself...</h3>
+                    <h3 onclick="app.getUser('clinteastwood','31814799-B4B5-4D67-B5F4-989245BD8DDD');">Please Identify Yourself...</h3>
                 </center>
             </div>
 
@@ -289,23 +289,33 @@
         <div data-role="header" data-position="fixed" class="appBar">
             <h1>Order Manager</h1>
             <a href="#or_page" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
-
         </div>
         <div class="fieldContainer">
-            <form id="writeOrderForm">
-                <select id="slcOrder" onchange="printValue(this.value)">
-                    <option value="Ordine1"> Order1
-                        <option value="Ordine2">Order2
-                            <option value="Ordine3">Order3
+            <form>
+                Order:
+                <select id="writeOrderSelect">
+                    <option value="doNothing" selected> -- Select an Order -- </option>
                 </select>
-
-                <div id="write_order_loader" class="configurationBox">
-                    <center>
-                        <div id="loader"></div>
-                        <h3>Please touch the nfc to write an order</h3>
-                    </center>
-                </div>
             </form>
+        </div>
+
+        <div class="ul-content" role="main">
+
+            <div id="writeOrderDefault" class="defaultAdd">
+
+                <button onclick="app.enableWrite();">
+                    Write selected order
+                </button>
+
+            </div>
+            <div id="writeOrderResponse" class="successResponse configurationBox" hidden>
+
+                <center>
+                    <div id="loader"></div>
+                    <h3>Please touch the nfc to write</h3>
+                </center>
+
+            </div>
 
         </div>
     </div>
@@ -565,28 +575,24 @@
             </form>
         </div>
         <div class="ul-content" role="main">
+
+            <div id="verifyLocationResponse" class="successResponse configurationBox" hidden>
+
+                <center>
+                    <div id="loader"></div>
+                    <h3>Please touch the nfc to write</h3>
+                </center>
+
+            </div>
+
             <div id="verifyLocationDefault" class="defaultAdd">
 
                 <button onclick="app.enableWrite();">
-                    Verify
+                    Write location to device
                 </button>
 
             </div>
 
-            <div id="verifyLocationResponse" class="successResponse" hidden>
-
-                <div class="successBox">
-                    <center>
-                        <i class="fa fa-check"></i>
-                        The Location is in the DB
-                    </center>
-                </div>
-
-                <button onclick="app.implementMe();">
-                    Configure the Location
-                </button>
-
-            </div>
         </div>
     </div>
 
@@ -615,7 +621,7 @@
             <div id="verifyBatchDefault" class="defaultAdd">
 
                 <button onclick="app.implementMe();">
-                    Verify
+                    Write employee to device
                 </button>
 
             </div>

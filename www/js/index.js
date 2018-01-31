@@ -9,7 +9,8 @@ var app = {
         ADDLOCATION: "add_location_page",
         CONFLOCATION: "configure_location_page",
         ADDORDER: "add_order_page",
-        CONFORDER: "configure_order_page"
+        CONFORDER: "configure_order_page",
+        WRITEORDER: "write_order_page"
     },
 
     initialize: function () {
@@ -153,9 +154,9 @@ var app = {
                             app.disableInput();
                             break;
                         case app.pages.CONFLOCATION:
-                            if ($("#verifyLocationDefault").is(":visible")) {
-                                document.getElementById(locID).innerHTML = response.name;
-                            }
+                            //if ($("#verifyLocationDefault").is(":visible")) {
+                            document.getElementById(locID).innerHTML = response.name;
+                            //}
                             break;
                         default:
                         //doNothing();
@@ -412,16 +413,36 @@ var app = {
                     newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
                     document.getElementById("verifyLocationDefault").innerHTML = newDiv;
                 } else {
-                    var sel = document.getElementById('orderSelect');
-                    var tmp = new Array();
-                    tmp = response;
-                    for (i = 0; i < tmp.length; i++) {
-                        var opt = document.createElement('option');
-                        opt.id = tmp[i].order.ID;
-                        opt.value = tmp[i].order.ID;
-                        //opt.innerText = tmp[i].date;
-                        sel.appendChild(opt);
-                        app.getOrderByDate(tmp[i].order.ID, tmp[i].date);
+                    var currentPage = $.mobile.activePage.attr('id');
+
+                    switch (currentPage) {
+                        case app.pages.CONFORDER:
+                            var sel = document.getElementById('orderSelect');
+                            var tmp = new Array();
+                            tmp = response;
+                            for (i = 0; i < tmp.length; i++) {
+                                var opt = document.createElement('option');
+                                opt.id = tmp[i].order.ID;
+                                opt.value = tmp[i].order.ID;
+                                //opt.innerText = tmp[i].date;
+                                sel.appendChild(opt);
+                                app.getOrderByDate(tmp[i].order.ID, tmp[i].date);
+                            }
+                            break;
+                        case app.pages.WRITEORDER:
+                            var sel = document.getElementById('writeOrderSelect');
+                            var tmp = new Array();
+                            tmp = response;
+                            for (i = 0; i < tmp.length; i++) {
+                                var opt = document.createElement('option');
+                                opt.id = "write" + tmp[i].order.ID;
+                                opt.value = tmp[i].order.ID;
+                                sel.appendChild(opt);
+                                app.getOrderByDate(tmp[i].order.ID, tmp[i].date);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
             },
@@ -449,6 +470,9 @@ var app = {
                 switch (currentPage) {
                     case app.pages.CONFORDER:
                         document.getElementById(orderID).innerHTML = orderDate + " Order: " + response.to.ID;
+                        break;
+                    case app.pages.WRITEORDER:
+                        document.getElementById("write" + orderID).innerHTML = orderDate + " Order: " + response.to.ID;
                         break;
                     default:
                     //doNothing();
@@ -675,7 +699,10 @@ var app = {
                 break;
             case app.pages.CONFORDER:
                 app.getOrders();
-                //app.getLocalProducts();
+                app.getProducts();
+                break;
+            case app.pages.WRITEORDER:
+                app.getOrders();
                 break;
             default:
         }
@@ -725,6 +752,14 @@ var app = {
                     $("#configureOrderResponse").show();
                 } else {
                     alert("Select an order and a product first");
+                }
+                break;
+            case app.pages.WRITEORDER:
+                if ($('#writeOrderSelect').find(":selected").val() != "doNothing") {
+                    $("#writeOrderDefault").hide();
+                    $("#writeOrderResponse").show();
+                } else {
+                    alert("Select an order first");
                 }
                 break;
             default:
@@ -790,6 +825,10 @@ var app = {
                 document.getElementById('roleid').removeAttribute("disabled")
                 $("#roleid").parent().removeClass("ui-state-disabled");
                 break;
+            case app.pages.EMPVER:
+                $("#verifyUserDefault").show();
+                $("#verifyUserResponse").hide();
+                break;
             case app.pages.ADDLOCATION:
                 document.getElementById('nameLocation').removeAttribute("disabled");
                 $("#nameLocation").parent().removeClass("ui-state-disabled");
@@ -797,8 +836,13 @@ var app = {
                 $("#locationID").parent().removeClass("ui-state-disabled");
                 break;
             case app.pages.CONFLOCATION:
-                document.getElementById('locationID').removeAttribute("disabled")
-                $("#locationID").parent().removeClass("ui-state-disabled");
+                $("#verifyLocationDefault").show();
+                $("#verifyLocationResponse").hide();
+
+                break;
+            case app.pages.WRITEORDER:
+                $("#writeOrderDefault").show();
+                $("#writeOrderResponse").hide();
                 break;
             default:
                 break;
@@ -835,6 +879,9 @@ var app = {
             case app.pages.CONFORDER:
                 document.getElementById("orderSelect").innerHTML = '<option value="doNothing" selected> -- Select an Order -- </option>';
                 document.getElementById("productSelect").innerHTML = '<option value="doNothing" id="productSelectStandard" selected> -- Select a Product -- </option>';
+                break;
+            case app.pages.WRITEORDER:
+                document.getElementById("writeOrderSelect").innerHTML = '<option value="doNothing" selected> -- Select an Order -- </option>';
                 break;
             default:
                 break;
