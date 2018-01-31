@@ -51,7 +51,7 @@
                     </button>
                 </a>
 
-                <a href="#em_page" data-transition="slide">
+                <a href="#or_page" data-transition="slide">
                     <button>
                         Equipment &amp; Materials Manager
                     </button>
@@ -65,7 +65,6 @@
 
             </div>
         </div>
-
 
         <div data-role="footer" data-position="fixed">
             <h1>© TeamThree Solutions</h1>
@@ -189,52 +188,97 @@
     </div>
 
 
-    <div data-role="page" id="configure_order_page">
+    <div data-role="page" id="add_order_page">
+
         <div data-role="header" data-position="fixed" class="appBar">
             <h1>Order Manager</h1>
+            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
+
+        </div>
+
+        <div class="fieldContainer">
+            <form id="addOrderForm">
+                Destination Warehouse
+                <select id="warehouseSelect">
+                    <option value="doNothing"> -- Select a Warehouse -- </option>
+                </select>
+
+                <div id="orderIDdiv" hidden>
+                    <br> Order ID:
+                    <input type="text" name="orderID" id="orderID" class="orderID" disabled>
+                </div>
+
+                <br> Warehouse ID:
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
+
+                <div id="addOrderDefault" class="defaultAdd">
+                    <button onclick="app.addOrder();">
+                        Place the Order
+                    </button>
+                </div>
+
+                <div id="addOrderResponse" class="successResponse configurationBox" hidden>
+                    <div class="successBox">
+                        <center>
+                            <i class="fa fa-check"></i>
+                            Order added successfully
+                        </center>
+                    </div>
+
+                    <center>
+                        <div id="loader"></div>
+                        <h3>Please approach the NFC to store the order </h3>
+                    </center>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div data-role="page" id="configure_order_page">
+        <div data-role="header" data-position="fixed" class="appBar">
+            <h1 onclick="app.getProducts();">Order Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
         </div>
 
         <div class="fieldContainer_configureWarehouse">
             <form>
-                <br> Order ID
-                <br>
-                <input type="text" name="orderIDVerify" id="orderIDVerify" value="">
-                <br> Product ID
-                <br>
-                <input type="text" name="productIDVerify" id="productIDVerify" value="">
+                <select id="orderSelect">
+                    <option value="doNothing" selected> -- Select an Order -- </option>
+                </select>
+                <br> Product
+                <select id="productSelect">
+                    <option value="doNothing" id="productSelectStandard" selected> -- Select a Product -- </option>
+                </select>
                 <br> Quantity
-                <br>
-                <input type="text" name="quantityVerify" id="quantityVerify" value="">
+                <input type="text" name="quantityConfigureOrder" id="quantityConfigureOrder" value="">
                 <br> Warehouse ID
-                <br>
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
 
             </form>
         </div>
+
+        <div id="configureOrderResponse" class="successResponse" hidden>
+
+            <div class="successBox">
+                <center>
+                    <i class="fa fa-check"></i>
+                    Product added successfully
+                </center>
+            </div>
+
+        </div>
+
         <div class="ul-content" role="main">
-            <div id="verifyOrderDefault" class="defaultAdd">
+            <div id="configureOrderDefault" class="defaultAdd">
 
-                <button onclick="app.verifyOrder();">
-                    Verify Order
+                <button onclick="app.addProductToOrder();">
+                    Add product
                 </button>
 
             </div>
 
-            <div id="verifyOrderResponse" class="successResponse" hidden>
-
-                <div class="successBox">
-                    <center>
-                        <i class="fa fa-check"></i>
-                        The Order is in the DB
-                    </center>
-                </div>
-
-                <button onclick="app.implementMe();">
-                    Configure the Order
-                </button>
-
-            </div>
         </div>
     </div>
 
@@ -267,40 +311,6 @@
     </div>
 
 
-    <div data-role="page" id="add_order_page">
-
-        <div data-role="header" data-position="fixed" class="appBar">
-            <h1>Order Manager</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
-
-        </div>
-
-        <div class="fieldContainer">
-            <form id="addOrderForm">
-                <select id="slcMagazzino" onchange="printValue(this.value)">
-                    <option value="Werehouse1">Werehouse1
-                        <option value="Werehouse2">Werehouse2
-                            <option value="Werehouse3">Werehouse3
-                </select>
-
-                <script>
-                    function printValue(myVal) {
-                        document.getElementById("selectedValue").innerHTML = myVal;
-                    }
-                </script>
-
-                <div id="selectedValue"></div>
-
-                <br> Warehouse ID:
-                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
-                <button onclick="app.implementMe();">
-                    Place the order
-                </button>
-            </form>
-        </div>
-    </div>
-
-
     <div data-role="page" id="add_employee_page">
 
         <div data-role="header" data-position="fixed" class="appBar">
@@ -316,7 +326,7 @@
                 <br> Last name:
                 <input type="text" name="lastname" id="lastname">
                 <br> Birth Date:
-                <input type="text" name="birthdate" id="birthdate">
+                <input type="text" name="birthdate" id="birthdate" placeholder="yyyy-mm-dd">
                 <br> Fiscal Code:
                 <input type="text" name="fiscalcode" id="fiscalcode">
                 <br> Role:
@@ -332,12 +342,6 @@
                 <button onclick="app.addUser();">
                     Add
                 </button>
-
-                <!--
-                <button onclick="app.implementMe();">
-                    Add and Configure a bracelet
-                </button>
-            -->
             </div>
             <div id="addUserResponse" class="successResponse" hidden>
 
@@ -378,7 +382,7 @@
     <div data-role="page" id="configure_bracelet_page">
 
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1 onclick="app.getUsers();">Workforce Manager</h1>
+            <h1>Workforce Manager</h1>
             <a href="#or_page" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
 
         </div>
@@ -551,11 +555,11 @@
 
         <div class="fieldContainer_configureWarehouse">
             <form>
-                <br> Location ID
-                <br>
-                <input type="text" name="locationIDVerify" id="locationIDVerify" value="">
-                <br> Warehouse ID
-                <br>
+                Location ID
+                <select id="locationIDSelect">
+                    <option value="doNothing" selected> -- Select a Location -- </option>
+                </select>
+                <br>Warehouse ID
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
 
             </form>
@@ -563,7 +567,7 @@
         <div class="ul-content" role="main">
             <div id="verifyLocationDefault" class="defaultAdd">
 
-                <button onclick="app.verifyLocation();">
+                <button onclick="app.enableWrite();">
                     Verify
                 </button>
 
