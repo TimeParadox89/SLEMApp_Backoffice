@@ -48,7 +48,7 @@ var app = {
      */
     onNfc: function (nfcEvent) {
         var currentPage = $.mobile.activePage.attr('id');
-        app.onNfc = app.doNothingOnNfc;
+        //app.onNfc = app.doNothingOnNfc;
 
         switch (currentPage) {
             case app.pages.HOME:
@@ -68,15 +68,28 @@ var app = {
                 }
                 break;
             case app.pages.ADDLOCATION:
-                //implementare bisogna aggiungere il campo locationID disabled, lo vado a modificare in fase di aggiunta con response.ID
+                if ($("#addLocationConfiguration").is(":visible")) {
+                    app.writeToNFC($('#locationID').val(), $('#warehouseID').val());
+                }
                 break;
             case app.pages.CONFLOCATION:
                 if ($("#verifyLocationResponse").is(":visible")) {
                     app.writeToNFC($('#locationIDSelect').find(":selected").val(), $('#warehouseID').val());
                 }
                 break;
+            case app.pages.ADDORDER:
+                if ($("#addOrderConfiguration").is(":visible")) {
+                    app.writeToNFC($('#addOrderID').val(), $('#warehouseID').val());
+                }
+                break;
+            case app.pages.WRITEORDER:
+                if ($("#writeOrderResponse").is(":visible")) {
+                    app.writeToNFC($('#writeOrderSelect').find(":selected").val(), $('#warehouseID').val());
+                }
+                break;
             default:
-            //doNothing();
+                //doNothing();
+                break;
         }
 
     },
@@ -123,6 +136,7 @@ var app = {
                     document.getElementById("addLocationDefault").innerHTML = newDiv;
 
                 } else {
+                    document.getElementById("locationID").value = response.ID;
                     $("#addLocationResponse").show();
                     $("#addLocationDefault").hide();
                     app.disableInput();
@@ -373,16 +387,14 @@ var app = {
                 date: app.getTodayDate(),
             }),
             success: function (response) {
-                if (response.status == "error") {
+                if (response.error == "error") {
                     newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addOrderDefault").innerHTML;
                     document.getElementById("addOrderDefault").innerHTML = newDiv;
                 } else {
                     $("#addOrderDefault").hide();
                     $("#addOrderResponse").show();
                     $("#orderIDdiv").show();
-                    document.getElementById('orderID').innerText = response.OrderID;
-                    alert("aspetta");
-                    // app.disableInput();
+                    document.getElementById('addOrderID').value = response.OrderID;
                 }
             },
             error: function (response) {
@@ -754,6 +766,10 @@ var app = {
                     alert("Select an order and a product first");
                 }
                 break;
+            case app.pages.ADDORDER:
+                $("#addOrderConfiguration").show();
+                $("#addOrderResponse").hide();
+                break;
             case app.pages.WRITEORDER:
                 if ($('#writeOrderSelect').find(":selected").val() != "doNothing") {
                     $("#writeOrderDefault").hide();
@@ -832,13 +848,16 @@ var app = {
             case app.pages.ADDLOCATION:
                 document.getElementById('nameLocation').removeAttribute("disabled");
                 $("#nameLocation").parent().removeClass("ui-state-disabled");
-                document.getElementById('locationID').removeAttribute("disabled")
-                $("#locationID").parent().removeClass("ui-state-disabled");
                 break;
             case app.pages.CONFLOCATION:
                 $("#verifyLocationDefault").show();
                 $("#verifyLocationResponse").hide();
-
+                break;
+            case app.pages.ADDORDER:
+                $("#addOrderDefault").show();
+                $("#addOrderConfiguration").hide();
+                $("#addOrderResponse").hide();
+                $("#orderIDdiv").hide();
                 break;
             case app.pages.WRITEORDER:
                 $("#writeOrderDefault").show();
@@ -880,6 +899,9 @@ var app = {
                 document.getElementById("orderSelect").innerHTML = '<option value="doNothing" selected> -- Select an Order -- </option>';
                 document.getElementById("productSelect").innerHTML = '<option value="doNothing" id="productSelectStandard" selected> -- Select a Product -- </option>';
                 break;
+            case app.pages.ADDORDER:
+                document.getElementById("warehouseSelect").innerHTML = '<option value="doNothing" selected> -- Select a Warehouse -- </option>';
+                break;
             case app.pages.WRITEORDER:
                 document.getElementById("writeOrderSelect").innerHTML = '<option value="doNothing" selected> -- Select an Order -- </option>';
                 break;
@@ -889,7 +911,7 @@ var app = {
     },
 
     writeToNFC: function (value1, value2) {
-        var message = [value1, value2];
+        var message = [ndef.textRecord(value1), ndef.textRecord(value2)];
         // write the record to the tag:
         nfc.write(
             message, // write the record itself to the tag

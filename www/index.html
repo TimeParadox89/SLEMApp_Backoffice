@@ -205,40 +205,54 @@
 
                 <div id="orderIDdiv" hidden>
                     <br> Order ID:
-                    <input type="text" name="orderID" id="orderID" class="orderID" disabled>
+                    <input type="text" name="addOrderID" id="addOrderID" class="addOrderID" disabled>
                 </div>
 
                 <br> Warehouse ID:
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
+            </form>
+            <div id="addOrderDefault" class="defaultAdd">
+                <button onclick="app.addOrder();">
+                    Place the Order
+                </button>
+            </div>
 
-                <div id="addOrderDefault" class="defaultAdd">
-                    <button onclick="app.addOrder();">
-                        Place the Order
-                    </button>
-                </div>
-
-                <div id="addOrderResponse" class="successResponse configurationBox" hidden>
-                    <div class="successBox">
-                        <center>
-                            <i class="fa fa-check"></i>
-                            Order added successfully
-                        </center>
-                    </div>
-
+            <div id="addOrderResponse" class="successResponse configurationBox" hidden>
+                <div class="successBox">
                     <center>
-                        <div id="loader"></div>
-                        <h3>Please approach the NFC to store the order </h3>
+                        <i class="fa fa-check"></i>
+                        Order Added Successfully
                     </center>
                 </div>
 
-            </form>
+                <button onclick="app.enableWrite();">
+                    Configure a sticker
+                </button>
+
+            </div>
+
+            <div id="addOrderConfiguration" class="addOrderConfiguration configurationBox" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        Order Added Successfully
+                    </center>
+                </div>
+
+                <center>
+                    <div id="loader"></div>
+
+                    <h3>Please approach the device to write the information</h3>
+                </center>
+            </div>
         </div>
     </div>
 
 
     <div data-role="page" id="configure_order_page">
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1 onclick="app.getProducts();">Order Manager</h1>
+            <h1>Order Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
         </div>
 
@@ -493,7 +507,7 @@
 
     <div data-role="page" id="add_location_page">
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1 onclick="app.disableInput();">Warehouse Manager</h1>
+            <h1>Warehouse Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
         </div>
 
@@ -501,6 +515,8 @@
             <form id="addLocation_form">
                 <br> Name
                 <input type="text" name="nameLocation" value="" id="nameLocation">
+                <br> Location ID
+                <input type="text" name="locationID" value="" id="locationID" class="locationID" disabled>
                 <br> Warehouse ID
                 <input type="text" name="warehouseID" value="" id="warehouseID" class="warehouseID" disabled>
 
