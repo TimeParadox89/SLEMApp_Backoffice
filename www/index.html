@@ -24,7 +24,7 @@
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 <span class="logoutText">Logout</span>
             </button>
-            <h1>SLEM Backoffice</h1>
+            <h1 onclick="app.asd();">SLEM Backoffice</h1>
             <span id="helloMr"></span>
         </div>
         <div class="homeHeader">
@@ -53,7 +53,7 @@
 
                 <a href="#or_page" data-transition="slide">
                     <button>
-                        Order Manager
+                        Sales Manager
                     </button>
                 </a>
 
@@ -158,14 +158,14 @@
 
     <div data-role="page" id="or_page">
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1>Order Manager</h1>
+            <h1>Sales Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
         </div>
 
         <div class="homeHeader">
             <center>
                 <img src="img/warehouse.png" />
-                <h2>Order Manager</h2>
+                <h2>Sales Manager</h2>
             </center>
         </div>
 
@@ -191,7 +191,7 @@
     <div data-role="page" id="add_order_page">
 
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1>Order Manager</h1>
+            <h1>Sales Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
 
         </div>
@@ -252,7 +252,7 @@
 
     <div data-role="page" id="configure_order_page">
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1>Order Manager</h1>
+            <h1>Sales Manager</h1>
             <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
         </div>
 
@@ -301,7 +301,7 @@
     <div data-role="page" id="write_order_page">
 
         <div data-role="header" data-position="fixed" class="appBar">
-            <h1>Order Manager</h1>
+            <h1>Sales Manager</h1>
             <a href="#or_page" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
         </div>
         <div class="fieldContainer">
@@ -354,7 +354,15 @@
                 <br> Fiscal Code:
                 <input type="text" name="fiscalcode" id="fiscalcode">
                 <br> Role:
-                <input type="text" name="roleid" id="roleid">
+                <select name="roleSelect" id="roleSelect">
+                    <option value="0" id="0">Inbound</option> 
+                    <option value="0" id="0">Outbound</option> 
+                    <option value="0" id="0">Inbound &amp; Outbound</option> 
+                </select>
+                <br> E-mail:
+                <input type="text" name="email" id="email">
+                <br> Token ID:
+                <input type="text" name="tokenID" id="token" disabled>
                 <br> Warehouse ID:
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
             </form>
@@ -418,6 +426,8 @@
                     <option value="doNothing" selected> -- Select an Employee -- </option>
                 </select>
 
+                <br> Token ID:
+                <input type="text" name="tokenXonfigure" class="tokenConfigure" id="tokenConfigure" disabled>
                 <br> Warehouse ID:
                 <input type="text" name="warehouseID" class="warehouseID" disabled>
             </form>

@@ -1,3 +1,4 @@
+var TOKEN_ID = "";
 var app = {
     pages: {
         MAIN: "main_page",
@@ -55,16 +56,18 @@ var app = {
                 var tag = nfcEvent.tag;
                 var managerID = ndef.textHelper.decodePayload(tag.ndefMessage[0].payload);
                 var myWarehouseID = ndef.textHelper.decodePayload(tag.ndefMessage[1].payload);
+                var myTokenID = ndef.textHelper.decodePayload(tag.ndefMessage[2].payload);
+                app.setToken(myTokenID);
                 app.getUser(managerID, myWarehouseID);
                 break;
             case app.pages.ADDUSER:
                 if ($("#addUserConfiguration").is(":visible")) {
-                    app.writeToNFC($('#fiscalcode').val(), $('#warehouseID').val());
+                    app.writeUserToNFC($('#fiscalcode').val(), $('#warehouseID').val());
                 }
                 break;
             case app.pages.EMPVER:
                 if ($("#verifyUserResponse").is(":visible")) {
-                    app.writeToNFC($('#fiscalcodeSelect').find(":selected").val(), $('#warehouseID').val());
+                    app.writeUserToNFC($('#fiscalcodeSelect').find(":selected").val(), $('#warehouseID').val());
                 }
                 break;
             case app.pages.ADDLOCATION:
@@ -145,7 +148,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -175,7 +179,6 @@ var app = {
                         default:
                         //doNothing();
                     }
-
                 }
             },
             error: function (response) {
@@ -184,7 +187,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -219,55 +223,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
-        });
-    },
-
-    addBatch: function () {
-        $.ajax({
-            type: 'POST',
-            url: 'INSERIRE L?URL DAL DATABASE',
-            data: JSON.stringify({
-                productID: $('#productid').val(),
-                quantity: $('#quantity').val(),
-                location: $('#batchLocation').val(),
-                warehouseID: "INSERIRE DAL DBBBBBBBBBBBBBBBB"
-            }),
-            success: function (response) {
-                if (response.status == "error") {
-                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("addBatchDefault").innerHTML;
-                    document.getElementById("addBatchDefault").innerHTML = newDiv;
-                } else {
-                    $("addBatchResponse").show();
-                    $("addBatchDefault").hide();
-                    app.disableInput();
-                }
-            },
-            contentType: "application/json",
-            dataType: 'json'
-        });
-    },
-
-    getBatch: function (prodID, whId) {
-        $.ajax({
-            type: 'GET',
-            url: 'INSERIEEEEEEEEEEE',
-            data: {
-                productID: prodID,
-                warehouseID: whID
-            },
-            success: function (response) {
-                if (response.status == "error") {
-                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.message + '</center></div>' + document.getElementById("verifyBatchDefault").innerHTML;
-                    document.getElementById("verifyBatchDefault").innerHTML = newDiv;
-                } else {
-                    $("#verifyBatchDefault").hide();
-                    $("#verifyBatchResponse").show();
-
-
-                }
-
-            }
+            dataType: 'json',
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -280,8 +237,9 @@ var app = {
                 name: $('#firstname').val(),
                 surname: $('#lastname').val(),
                 birthDate: $('#birthdate').val(),
-                roleID: $('#roleid').val(),
-                warehouseID: $('#warehouseID').val()
+                roleID: $('#roleSelect').find(":selected").val(),
+                warehouseID: $('#warehouseID').val(),
+                mail: $('#email').val()
             }),
             success: function (response) {
                 if (response.status == "error") {
@@ -291,6 +249,7 @@ var app = {
                     $("#addUserDefault").hide();
                     $("#addUserResponse").show();
                     app.disableInput();
+                    app.getAccessToken();
                 }
             },
             error: function (response) {
@@ -299,11 +258,46 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
 
     },
 
+    getAccessToken: function () {
+        var win = window.open("http://petprojects.altervista.org/Authentication/", "_blank", "location=no");
+
+        win.addEventListener("loadstop", function () {
+
+            // Clear out the name in localStorage for subsequent opens.
+            win.executeScript({ code: "localStorage.setItem( 'tokenID', '' );" });
+
+            // Start an interval
+            var loop = setInterval(function () {
+
+                // Execute JavaScript to check for the existence of a name in the
+                // child browser's localStorage.
+                win.executeScript(
+                    {
+                        code: "localStorage.getItem( 'tokenID' )"
+                    },
+                    function (values) {
+                        var tokenid = values[0];
+
+                        // If a name was set, clear the interval and close the InAppBrowser.
+                        if (tokenid) {
+                            clearInterval(loop);
+                            win.close();
+                            TOKEN_ID = tokenid;
+                            document.getElementById("token").value = tokenid;
+                            document.getElementById("tokenConfigure").value = tokenid;
+                        }
+                    }
+                );
+            });
+        });
+
+    },
 
     getUser: function (userID, myWhID) {
         $.ajax({
@@ -338,7 +332,8 @@ var app = {
                 }
             },
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -374,7 +369,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -403,9 +399,9 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
-
     },
 
     getOrders: function () {
@@ -460,7 +456,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -491,7 +488,8 @@ var app = {
                 }
             },
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -522,7 +520,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -559,7 +558,8 @@ var app = {
                 }
             },
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -587,7 +587,8 @@ var app = {
                 }
             },
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -602,8 +603,8 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("addLocationDefault").innerHTML;
-                        document.getElementById("addLocationDefault").innerHTML = newDiv;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The order already contains this product </center></div>' + document.getElementById("configureOrderDefault").innerHTML;
+                        document.getElementById("configureOrderDefault").innerHTML = newDiv;
                     }
                 }
             },
@@ -621,7 +622,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -656,7 +658,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -691,7 +694,8 @@ var app = {
             },
             contentType: "application/json",
             accept: "application/json",
-            dataType: 'json'
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -744,6 +748,7 @@ var app = {
 
         switch (currentPage) {
             case app.pages.EMPVER:
+                app.getAccessToken();
                 if ($('#fiscalcodeSelect').find(":selected").val() != "doNothing") {
                     $("#verifyUserDefault").hide();
                     $("#verifyUserResponse").show();
@@ -806,8 +811,10 @@ var app = {
                 $("#birthdate").parent().addClass("ui-state-disabled");
                 document.getElementById('fiscalcode').setAttribute("disabled", "disabled");
                 $("#fiscalcode").parent().addClass("ui-state-disabled");
-                document.getElementById('roleid').setAttribute("disabled", "disabled");
-                $("#roleid").parent().addClass("ui-state-disabled");
+                document.getElementById('roleSelect').setAttribute("disabled", "disabled");
+                $("#roleSelect").parent().addClass("ui-state-disabled");
+                document.getElementById('email').setAttribute("disabled", "disabled");
+                $("#email").parent().addClass("ui-state-disabled");
                 break;
             case app.pages.ADDLOCATION:
                 document.getElementById('nameLocation').setAttribute("disabled", "disabled");
@@ -838,8 +845,10 @@ var app = {
                 $("#birthdate").parent().removeClass("ui-state-disabled");
                 document.getElementById('fiscalcode').removeAttribute("disabled")
                 $("#fiscalcode").parent().removeClass("ui-state-disabled");
-                document.getElementById('roleid').removeAttribute("disabled")
-                $("#roleid").parent().removeClass("ui-state-disabled");
+                document.getElementById('roleSelect').removeAttribute("disabled")
+                $("#roleSelect").parent().removeClass("ui-state-disabled");
+                document.getElementById('email').removeAttribute("disabled")
+                $("#email").parent().removeClass("ui-state-disabled");
                 break;
             case app.pages.EMPVER:
                 $("#verifyUserDefault").show();
@@ -878,7 +887,8 @@ var app = {
                 $("#lastname").val("");
                 $("#birthdate").val("");
                 $("#fiscalcode").val("");
-                $("#roleid").val("");
+                $("#email").val("");
+                $("#token").val("");
                 $('#addUserDefault').show();
                 $('#addUserResponse').hide();
                 break;
@@ -891,6 +901,7 @@ var app = {
                 break;
             case app.pages.EMPVER:
                 document.getElementById("fiscalcodeSelect").innerHTML = '<option value="doNothing" selected> -- Select an Employee -- </option>';
+                $("#tokenConfigure").val("");
                 break;
             case app.pages.CONFLOCATION:
                 document.getElementById("locationIDSelect").innerHTML = '<option value="doNothing" selected> -- Select a Location -- </option>';
@@ -925,6 +936,21 @@ var app = {
         );
     },
 
+    writeUserToNFC: function (value1, value2) {
+        var message = [ndef.textRecord(value1), ndef.textRecord(value2), ndef.textRecord(TOKEN_ID)];
+        // write the record to the tag:
+        nfc.write(
+            message, // write the record itself to the tag
+            function () { // when complete, run app callback function:
+                alert("Device scritto correttamente");
+            },
+            // app function runs if the write command fails:
+            function (reason) {
+                alert("There is a problem: " + reason);
+            }
+        );
+    },
+
     getTodayDate: function () {
         var today = new Date();
         var dd = today.getDate();
@@ -942,6 +968,10 @@ var app = {
         today = yyyy + '-' + mm + '-' + dd;
 
         return today;
+    },
+
+    setToken: function (value) {
+        TOKEN_ID = value;
     }
 
 };
