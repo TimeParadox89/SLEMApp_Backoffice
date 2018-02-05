@@ -53,7 +53,7 @@
 
                 <a href="#or_page" data-transition="slide">
                     <button>
-                        Equipment &amp; Materials Manager
+                        Order Manager
                     </button>
                 </a>
 
@@ -452,59 +452,6 @@
     </div>
 
 
-    <div data-role="page" id="add_batch_page">
-        <div data-role="header" data-position="fixed" class="appBar">
-            <h1>E. &amp; M. Manager</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
-        </div>
-
-        <div class="fieldContainer">
-            <form>
-                Product ID
-                <input type="text" name="productid" id="productid" value="">
-                <br>Quantity
-                <input type="text" name="quantity" id="quantity" value="">
-                <br>Location
-                <input type="text" name="batchLocation" id="batchLocation" value="">
-                <br> Warehouse ID
-                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
-            </form>
-
-            <div class="ul-content" role="main">
-
-                <div id="addBatchDefault" class="defaultAdd">
-
-                    <button onclick="app.implementMe();">
-                        Add
-                    </button>
-                    <!--
-                    <button onclick="app.implementMe();">
-                        Add and Configure
-                    </button>
-                -->
-                </div>
-
-                <div id="addBatchResponse" class="successResponse" hidden>
-
-                    <div class="successBox">
-                        <center>
-                            <i class="fa fa-check"></i>
-                            The batch has been added successfully
-                        </center>
-                    </div>
-
-                    <button onclick="app.implementMe();">
-                        Configure the Batch
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-
     <div data-role="page" id="add_location_page">
         <div data-role="header" data-position="fixed" class="appBar">
             <h1>Warehouse Manager</h1>
@@ -529,11 +476,6 @@
                     <button onclick="app.addLocation();">
                         Add
                     </button>
-                    <!--
-                    <button onclick="app.addAndConfigure();">
-                        Add and Configure
-                    </button>
--->
                 </div>
 
                 <div id="addLocationResponse" class="successResponse" hidden>
@@ -613,86 +555,6 @@
     </div>
 
 
-
-    <div data-role="page" id="configure_batch_page">
-        <div data-role="header" data-position="fixed" class="appBar">
-            <h1>E. &amp; M. Manager</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
-        </div>
-
-        <div class="fieldContainer_configureBatch">
-            <form>
-                <br> Batch ID
-                <br>
-                <input type="text" name="configurationBatchID" id="configurationBatchID" value="">
-                <br> Warehouse ID
-                <br>
-                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
-
-            </form>
-
-        </div>
-        <div class="ul-content" role="main">
-
-            <div id="verifyBatchDefault" class="defaultAdd">
-
-                <button onclick="app.implementMe();">
-                    Write employee to device
-                </button>
-
-            </div>
-
-            <div id="verifyBatchResponse" class="successResponse" hidden>
-
-                <div class="successBox">
-                    <center>
-                        <i class="fa fa-check"></i>
-                        The Batch is in the DB
-                    </center>
-                </div>
-
-                <button onclick="app.implementMe();">
-                    Configure the Location
-                </button>
-
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-    <div data-role="page" id="lettura_page">
-        <div data-role="header" data-position="fixed">
-            <h1>Warehouse</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
-        </div>
-        <div class="ul-content" role="main">
-            <h2>Hello User, here you che try the NFC read function</h2>
-            <div id="read_result"></div>
-            <div id="status_div"></div>
-
-        </div>
-    </div>
-
-    <div data-role="page" id="scrittura_page">
-        <div data-role="header">
-            <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
-            <h1>MS</h1>
-        </div>
-        <div role="main" class="ui-content">
-            <div id="write_div">OJust place a text here to try the NFC function</div>
-            <input type="text" id="write_text_input">
-            <div id="write_result"></div>
-            <div id="status_div"></div>
-        </div>
-    </div>
 
     <script>
         $(document).ready(app.initialize);
