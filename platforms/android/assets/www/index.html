@@ -19,26 +19,31 @@
 <body>
 
     <div data-role="page" id="home">
-        <div data-role="header" data-position="fixed" class="appBar">
-            <h1>SLEM Backoffice</h1>
+        <div data-role="header" data-position="fixed" class="appBar" id="homeAppBar">
+            <button id="logoutButton" class="logoutButton" onclick="app.logout();" style="display: none;">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span class="logoutText">Logout</span>
+            </button>
+            <h1 onclick="app.asd();">SLEM Backoffice</h1>
+            <span id="helloMr"></span>
         </div>
         <div class="homeHeader">
             <center>
                 <img src="img/backoffice_main.png" />
-                <h2>SLEMApp Backoffice</h2>
+                <h2>SLEMapp Backoffice</h2>
             </center>
         </div>
 
         <div class="ul-content" role="main">
 
-            <div class="homeLoginContent" id="homeLoginContent" hidden>
+            <div class="homeLoginContent" id="homeLoginContent">
                 <center>
                     <div id="loader"></div>
-                    <h3>Please Identify Yourself...</h3>
+                    <h3 onclick="app.getUser('clinteastwood','31814799-B4B5-4D67-B5F4-989245BD8DDD');">Please Identify Yourself...</h3>
                 </center>
             </div>
 
-            <div class="homeMainContent" id="homeMainContent">
+            <div class="homeMainContent" id="homeMainContent" hidden>
 
                 <a href="#wf_page" data-transition="slide">
                     <button>
@@ -46,9 +51,9 @@
                     </button>
                 </a>
 
-                <a href="#em_page" data-transition="slide">
+                <a href="#or_page" data-transition="slide">
                     <button>
-                        Equipment &amp; Materials Manager
+                        Sales Manager
                     </button>
                 </a>
 
@@ -60,7 +65,6 @@
 
             </div>
         </div>
-
 
         <div data-role="footer" data-position="fixed">
             <h1>© TeamThree Solutions</h1>
@@ -152,6 +156,184 @@
 
     </div>
 
+    <div data-role="page" id="or_page">
+        <div data-role="header" data-position="fixed" class="appBar">
+            <h1>Sales Manager</h1>
+            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
+        </div>
+
+        <div class="homeHeader">
+            <center>
+                <img src="img/warehouse.png" />
+                <h2>Sales Manager</h2>
+            </center>
+        </div>
+
+        <div class="ul-content" role="main">
+
+            <button onclick="app.navigateTo('add_order_page');">
+                Place an order
+            </button>
+
+            <button onclick="app.navigateTo('configure_order_page');">
+                Configure an order
+            </button>
+
+            <button onclick="app.navigateTo('write_order_page');">
+                Write an order to NFC
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div data-role="page" id="add_order_page">
+
+        <div data-role="header" data-position="fixed" class="appBar">
+            <h1>Sales Manager</h1>
+            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
+
+        </div>
+
+        <div class="fieldContainer">
+            <form id="addOrderForm">
+                Destination Warehouse
+                <select id="warehouseSelect">
+                    <option value="doNothing"> -- Select a Warehouse -- </option>
+                </select>
+
+                <div id="orderIDdiv" hidden>
+                    <br> Order ID:
+                    <input type="text" name="addOrderID" id="addOrderID" class="addOrderID" disabled>
+                </div>
+
+                <br> Warehouse ID:
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
+            </form>
+            <div id="addOrderDefault" class="defaultAdd">
+                <button onclick="app.addOrder();">
+                    Place the Order
+                </button>
+            </div>
+
+            <div id="addOrderResponse" class="successResponse configurationBox" hidden>
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        Order Added Successfully
+                    </center>
+                </div>
+
+                <button onclick="app.enableWrite();">
+                    Configure a sticker
+                </button>
+
+            </div>
+
+            <div id="addOrderConfiguration" class="addOrderConfiguration configurationBox" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        Order Added Successfully
+                    </center>
+                </div>
+
+                <center>
+                    <div id="loader"></div>
+
+                    <h3>Please approach the device to write the information</h3>
+                </center>
+            </div>
+        </div>
+    </div>
+
+
+    <div data-role="page" id="configure_order_page">
+        <div data-role="header" data-position="fixed" class="appBar">
+            <h1>Sales Manager</h1>
+            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
+        </div>
+
+        <div class="fieldContainer_configureWarehouse">
+            <form>
+                <select id="orderSelect">
+                    <option value="doNothing" selected> -- Select an Order -- </option>
+                </select>
+                <br> Product
+                <select id="productSelect">
+                    <option value="doNothing" id="productSelectStandard" selected> -- Select a Product -- </option>
+                </select>
+                <br> Quantity
+                <input type="text" name="quantityConfigureOrder" id="quantityConfigureOrder" value="">
+                <br> Warehouse ID
+                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
+
+            </form>
+        </div>
+
+        <div id="configureOrderResponse" class="successResponse" hidden>
+
+            <div class="successBox">
+                <center>
+                    <i class="fa fa-check"></i>
+                    Product added successfully
+                </center>
+            </div>
+
+        </div>
+
+        <div class="ul-content" role="main">
+            <div id="configureOrderDefault" class="defaultAdd">
+
+                <button onclick="app.addProductToOrder();">
+                    Add product
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div data-role="page" id="write_order_page">
+
+        <div data-role="header" data-position="fixed" class="appBar">
+            <h1>Sales Manager</h1>
+            <a href="#or_page" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
+        </div>
+        <div class="fieldContainer">
+            <form>
+                Order:
+                <select id="writeOrderSelect">
+                    <option value="doNothing" selected> -- Select an Order -- </option>
+                </select>
+            </form>
+        </div>
+
+        <div class="ul-content" role="main">
+
+            <div id="writeOrderDefault" class="defaultAdd">
+
+                <button onclick="app.enableWrite();">
+                    Write selected order
+                </button>
+
+            </div>
+            <div id="writeOrderResponse" class="successResponse configurationBox" hidden>
+
+                <center>
+                    <div id="loader"></div>
+                    <h3>Please touch the nfc to write</h3>
+                </center>
+
+            </div>
+
+        </div>
+    </div>
+
 
     <div data-role="page" id="add_employee_page">
 
@@ -168,11 +350,19 @@
                 <br> Last name:
                 <input type="text" name="lastname" id="lastname">
                 <br> Birth Date:
-                <input type="text" name="birthdate" id="birthdate">
+                <input type="text" name="birthdate" id="birthdate" placeholder="yyyy-mm-dd">
                 <br> Fiscal Code:
                 <input type="text" name="fiscalcode" id="fiscalcode">
                 <br> Role:
-                <input type="text" name="roleid" id="roleid">
+                <select name="roleSelect" id="roleSelect">
+                    <option value="0" id="0">Inbound</option> 
+                    <option value="0" id="0">Outbound</option> 
+                    <option value="0" id="0">Inbound &amp; Outbound</option> 
+                </select>
+                <br> E-mail:
+                <input type="text" name="email" id="email">
+                <br> Token ID:
+                <input type="text" name="tokenID" id="token" disabled>
                 <br> Warehouse ID:
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" disabled>
             </form>
@@ -184,10 +374,6 @@
                 <button onclick="app.addUser();">
                     Add
                 </button>
-
-                <button onclick="app.implementMe();">
-                    Add and Configure a bracelet
-                </button>
             </div>
             <div id="addUserResponse" class="successResponse" hidden>
 
@@ -198,9 +384,26 @@
                     </center>
                 </div>
 
-                <button onclick="app.implementMe();">
+                <button onclick="app.swapDivByClass('successResponse','addUserConfiguration');">
                     Configure a Bracelet
                 </button>
+
+            </div>
+
+            <div id="addUserConfiguration" class="addUserConfiguration configurationBox" hidden>
+
+                <div class="successBox">
+                    <center>
+                        <i class="fa fa-check"></i>
+                        Employee Added Successfully
+                    </center>
+                </div>
+
+                <center>
+                    <div id="loader"></div>
+
+                    <h3>Please touch the nfc to write</h3>
+                </center>
 
             </div>
 
@@ -212,14 +415,19 @@
 
         <div data-role="header" data-position="fixed" class="appBar">
             <h1>Workforce Manager</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
+            <a href="#or_page" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton">Back</a>
 
         </div>
 
         <div class="fieldContainer">
             <form>
                 Fiscal Code:
-                <input type="text" name="fiscalcodeVerify">
+                <select id="fiscalcodeSelect">
+                    <option value="doNothing" selected> -- Select an Employee -- </option>
+                </select>
+
+                <br> Token ID:
+                <input type="text" name="tokenXonfigure" class="tokenConfigure" id="tokenConfigure" disabled>
                 <br> Warehouse ID:
                 <input type="text" name="warehouseID" class="warehouseID" disabled>
             </form>
@@ -229,12 +437,12 @@
 
             <div id="verifyUserDefault" class="defaultAdd">
 
-                <button onclick="app.implementMe();">
+                <button onclick="app.enableWrite();">
                     Verify
                 </button>
 
             </div>
-            <div id="verifyUserResponse" class="successResponse" hidden>
+            <div id="verifyUserResponse" class="successResponse configurationBox" hidden>
 
                 <div class="successBox">
                     <center>
@@ -243,64 +451,10 @@
                     </center>
                 </div>
 
-                <button onclick="app.implementMe();">
-                    Configure the Bracelet
-                </button>
-
-            </div>
-
-        </div>
-    </div>
-
-
-    <div data-role="page" id="add_batch_page">
-        <div data-role="header" data-position="fixed" class="appBar">
-            <h1>E. &amp; M. Manager</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
-        </div>
-
-        <div class="fieldContainer">
-            <form>
-                Product ID
-                <input type="text" name="productid" id="productid" value="">
-                <br> Warehouse ID
-                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="">
-                <br>Quantity
-                <input type="submit" name="quantity" id="quantity" value="">
-                <br>Location
-                <input type="text" name="batchLocation" id="batchLocation" value="">
-
-
-            </form>
-
-            <div class="ul-content" role="main">
-
-                <div id="addBatchDefault" class="defaultAdd">
-
-                    <button onclick="app.implementMe();">
-                        Add
-                    </button>
-
-                    <button onclick="app.implementMe();">
-                        Add and Configure
-                    </button>
-
-                </div>
-
-                <div id="addBatchResponse" class="successResponse" hidden>
-
-                    <div class="successBox">
-                        <center>
-                            <i class="fa fa-check"></i>
-                            The batch has been added successfully
-                        </center>
-                    </div>
-
-                    <button onclick="app.implementMe();">
-                        Configure the Batch
-                    </button>
-
-                </div>
+                <center>
+                    <div id="loader"></div>
+                    <h3>Please touch the nfc to write</h3>
+                </center>
 
             </div>
 
@@ -317,13 +471,10 @@
         <div class="fieldContainer">
             <form id="addLocation_form">
                 <br> Name
-                <br>
                 <input type="text" name="nameLocation" value="" id="nameLocation">
                 <br> Location ID
-                <br>
-                <input type="text" name="locationID" value="" id="locationID">
+                <input type="text" name="locationID" value="" id="locationID" class="locationID" disabled>
                 <br> Warehouse ID
-                <br>
                 <input type="text" name="warehouseID" value="" id="warehouseID" class="warehouseID" disabled>
 
 
@@ -335,10 +486,6 @@
                     <button onclick="app.addLocation();">
                         Add
                     </button>
-
-                    <button onclick="app.implementMe();">
-                        Add and Configure
-                    </button>
                 </div>
 
                 <div id="addLocationResponse" class="successResponse" hidden>
@@ -349,9 +496,27 @@
                         </center>
                     </div>
 
-                    <button onclick="app.implementMe();">
-                        Configure location
+                    <button onclick="app.swapDivByClass('successResponse','addLocationConfiguration');">
+                        Configure a Bracelet
                     </button>
+
+                </div>
+
+                <div id="addLocationConfiguration" class="addLocationConfiguration configurationBox" hidden>
+
+                    <div class="successBox">
+                        <center>
+                            <i class="fa fa-check"></i>
+                            The location has been added successfully
+                        </center>
+                    </div>
+
+                    <center>
+                        <div id="loader"></div>
+
+                        <h3>Please touch the nfc to write</h3>
+                    </center>
+
                 </div>
 
             </div>
@@ -368,82 +533,30 @@
 
         <div class="fieldContainer_configureWarehouse">
             <form>
-                <br> Location ID
-                <br>
-                <input type="text" name="locationidConfigure" id="locationConfigure" value="">
-                <br> Warehouse ID
-                <br>
+                Location ID
+                <select id="locationIDSelect">
+                    <option value="doNothing" selected> -- Select a Location -- </option>
+                </select>
+                <br>Warehouse ID
                 <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
 
             </form>
         </div>
         <div class="ul-content" role="main">
+
+            <div id="verifyLocationResponse" class="successResponse configurationBox" hidden>
+
+                <center>
+                    <div id="loader"></div>
+                    <h3>Please touch the nfc to write</h3>
+                </center>
+
+            </div>
+
             <div id="verifyLocationDefault" class="defaultAdd">
 
-                <button onclick="app.implementMe();">
-                    Verify
-                </button>
-
-            </div>
-
-            <div id="verifyLocationResponse" class="successResponse" hidden>
-
-                <div class="successBox">
-                    <center>
-                        <i class="fa fa-check"></i>
-                        The Location is in the DB
-                    </center>
-                </div>
-
-                <button onclick="app.implementMe();">
-                    Configure the Location
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-
-
-    <div data-role="page" id="configure_batch_page">
-        <div data-role="header" data-position="fixed" class="appBar">
-            <h1>E. &amp; M. Manager</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" data-icon="back" data-rel="back" class="backButton"> Back</a>
-        </div>
-
-        <div class="fieldContainer_configureBatch">
-            <form>
-                <br> Batch ID
-                <br>
-                <input type="text" name="configurationBatchID" id="configurationBatchID" value="">
-                <br> Warehouse ID
-                <br>
-                <input type="text" name="warehouseID" id="warehouseID" class="warehouseID" value="" disabled>
-
-            </form>
-
-        </div>
-        <div class="ul-content" role="main">
-
-            <div id="verifyBatchDefault" class="defaultAdd">
-
-                <button onclick="app.implementMe();">
-                    Verify
-                </button>
-
-            </div>
-
-            <div id="verifyBatchResponse" class="successResponse" hidden>
-
-                <div class="successBox">
-                    <center>
-                        <i class="fa fa-check"></i>
-                        The Batch is in the DB
-                    </center>
-                </div>
-
-                <button onclick="app.implementMe();">
-                    Configure the Location
+                <button onclick="app.enableWrite();">
+                    Write location to device
                 </button>
 
             </div>
@@ -452,38 +565,6 @@
     </div>
 
 
-
-
-
-
-
-
-
-    <div data-role="page" id="lettura_page">
-        <div data-role="header" data-position="fixed">
-            <h1>Warehouse</h1>
-            <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
-        </div>
-        <div class="ul-content" role="main">
-            <h2>Hello User, here you che try the NFC read function</h2>
-            <div id="read_result"></div>
-            <div id="status_div"></div>
-
-        </div>
-    </div>
-
-    <div data-role="page" id="scrittura_page">
-        <div data-role="header">
-            <a href="#home" data-transition="slide" data-direction="reverse" class="ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-icon-notext ui-btn-inline">Back</a>
-            <h1>MS</h1>
-        </div>
-        <div role="main" class="ui-content">
-            <div id="write_div">OJust place a text here to try the NFC function</div>
-            <input type="text" id="write_text_input">
-            <div id="write_result"></div>
-            <div id="status_div"></div>
-        </div>
-    </div>
 
     <script>
         $(document).ready(app.initialize);

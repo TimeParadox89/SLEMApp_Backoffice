@@ -44,12 +44,8 @@ var app = {
         //do nothing function used when an nfc event is fired and no code has to be executed
     },
 
-    /*
-    called when a device is close to a nfc tag
-     */
     onNfc: function (nfcEvent) {
         var currentPage = $.mobile.activePage.attr('id');
-        //app.onNfc = app.doNothingOnNfc;
 
         switch (currentPage) {
             case app.pages.HOME:
@@ -128,7 +124,7 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("addLocationDefault").innerHTML;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The location is not in the database </center></div>' + document.getElementById("addLocationDefault").innerHTML;
                         document.getElementById("addLocationDefault").innerHTML = newDiv;
                     }
                 }
@@ -199,7 +195,7 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The locations are not in the database </center></div>' + document.getElementById("verifyLocationDefault").innerHTML;
                         document.getElementById("verifyLocationDefault").innerHTML = newDiv;
                     }
                 }
@@ -239,22 +235,27 @@ var app = {
                 birthDate: $('#birthdate').val(),
                 roleID: $('#roleSelect').find(":selected").val(),
                 warehouseID: $('#warehouseID').val(),
-                mail: $('#email').val()
-            }),
+                mail: $('#email').val(),
+                tokenID: $('#token').val()
+            }),error: function (xhr, data) {
+                if (xhr.status == 404) {
+                    if (!$("#errorBox").is(":visible")) {
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user cannot be written in the database </center></div>' + document.getElementById("addUserDefault").innerHTML;
+                        document.getElementById("addUserDefault").innerHTML = newDiv;
+                    }
+                }
+            },
             success: function (response) {
                 if (response.status == "error") {
-                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>'
+                        + document.getElementById("addUserDefault").innerHTML;
                     document.getElementById("addUserDefault").innerHTML = newDiv;
                 } else {
+                    alert($('#token').val());
                     $("#addUserDefault").hide();
                     $("#addUserResponse").show();
                     app.disableInput();
-                    app.getAccessToken();
                 }
-            },
-            error: function (response) {
-                newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + "Ops! There is a problem" + '</center></div>' + document.getElementById("addUserDefault").innerHTML;
-                document.getElementById("addUserDefault").innerHTML = newDiv;
             },
             contentType: "application/json",
             accept: "application/json",
@@ -288,9 +289,10 @@ var app = {
                         if (tokenid) {
                             clearInterval(loop);
                             win.close();
-                            TOKEN_ID = tokenid;
                             document.getElementById("token").value = tokenid;
                             document.getElementById("tokenConfigure").value = tokenid;
+                            document.getElementById("getTokenDefault").setAttribute("disabled", "disabled");
+                            document.getElementById("addUserBtn").removeAttribute("disabled");
                         }
                     }
                 );
@@ -306,7 +308,8 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("homeLoginContent").innerHTML;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>'
+                            + document.getElementById("homeLoginContent").innerHTML;
                         document.getElementById("homeLoginContent").innerHTML = newDiv;
                     }
                 }
@@ -315,7 +318,6 @@ var app = {
                 var currentPage = $.mobile.activePage.attr('id');
                 switch (currentPage) {
                     case app.pages.HOME:
-                        //controlla se è ruolo amministratore accede altrimenti no
                         $('#homeMainContent').show();
                         $('#homeLoginContent').hide();
                         document.getElementById("helloMr").innerHTML += "Hello, " + response.surname;
@@ -328,7 +330,8 @@ var app = {
                         }
                         break;
                     default:
-                    //doNothing();
+                        //doNothing();
+                        break;
                 }
             },
             accept: "application/json",
@@ -344,7 +347,7 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("verifyUserDefault").innerHTML;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user list is not in the database </center></div>' + document.getElementById("verifyUserDefault").innerHTML;
                         document.getElementById("verifyUserDefault").innerHTML = newDiv;
                     }
                 }
@@ -370,7 +373,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -384,7 +387,8 @@ var app = {
             }),
             success: function (response) {
                 if (response.error == "error") {
-                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>' + document.getElementById("addOrderDefault").innerHTML;
+                    newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i>' + response.error + '</center></div>'
+                        + document.getElementById("addOrderDefault").innerHTML;
                     document.getElementById("addOrderDefault").innerHTML = newDiv;
                 } else {
                     $("#addOrderDefault").hide();
@@ -400,7 +404,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -457,7 +461,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -489,7 +493,7 @@ var app = {
             },
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -521,7 +525,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -559,7 +563,7 @@ var app = {
             },
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -588,7 +592,7 @@ var app = {
             },
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -623,7 +627,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -634,7 +638,7 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("addOrderDefault").innerHTML;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The warehouse is not in the database </center></div>' + document.getElementById("addOrderDefault").innerHTML;
                         document.getElementById("addOrderDefault").innerHTML = newDiv;
                     }
                 }
@@ -659,7 +663,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -670,7 +674,7 @@ var app = {
             error: function (xhr, data) {
                 if (xhr.status == 404) {
                     if (!$("#errorBox").is(":visible")) {
-                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The user is not in the database </center></div>' + document.getElementById("addOrderDefault").innerHTML;
+                        newDiv = '<div id="errorBox" class="errorBox"><center><i class="fa fa-times-circle"></i> The warehouses are not in the database </center></div>' + document.getElementById("addOrderDefault").innerHTML;
                         document.getElementById("addOrderDefault").innerHTML = newDiv;
                     }
                 }
@@ -695,7 +699,7 @@ var app = {
             contentType: "application/json",
             accept: "application/json",
             dataType: 'json',
-            beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + TOKEN_ID); }
+            beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + TOKEN_ID); }
         });
     },
 
@@ -891,6 +895,8 @@ var app = {
                 $("#token").val("");
                 $('#addUserDefault').show();
                 $('#addUserResponse').hide();
+                document.getElementById("addUserBtn").setAttribute("disabled", "disabled");
+                document.getElementById("getTokenDefault").removeAttribute("disabled");
                 break;
             case app.pages.ADDLOCATION:
                 $("#nameLocation").val("");

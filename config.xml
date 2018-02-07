@@ -7,7 +7,7 @@
     <author>
         TeamThree - Iannotta Erennio e Pappalardo Francesca
     </author>
-     <icon src="res/icon.png" />
+    <icon src="res/icon.png" />
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

@@ -213,19 +213,54 @@ form {
     height: 70px;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
-  }
-  
-  @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+}
 
-  #homeLoginContent h3{
-      font-weight: 300;
-      font-style: italic;
-  }
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#homeLoginContent h3 {
+    font-weight: 300;
+    font-style: italic;
+}
+
+.configurationBox #loader {
+    width: 40px;
+    height: 40px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #324a5d;
+}
+
+.configurationBox h3 {
+    font-weight: 300;
+    font-style: italic;
+}
+
+span#helloMr {
+    position: absolute;
+    top: .65em;
+    right: .4em;
+    text-transform: initial
+}
+
+.ui-header .logoutButton {
+    padding: .4em 1em !important;
+}
+
+.ui-header .logoutButton .logoutText {
+    font-size: 10px !important;
+}

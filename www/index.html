@@ -355,9 +355,9 @@
                 <input type="text" name="fiscalcode" id="fiscalcode">
                 <br> Role:
                 <select name="roleSelect" id="roleSelect">
-                    <option value="0" id="0">Inbound</option> 
-                    <option value="0" id="0">Outbound</option> 
-                    <option value="0" id="0">Inbound &amp; Outbound</option> 
+                    <option value="0" id="0">Inbound</option>
+                    <option value="0" id="0">Outbound</option>
+                    <option value="0" id="0">Inbound &amp; Outbound</option>
                 </select>
                 <br> E-mail:
                 <input type="text" name="email" id="email">
@@ -370,8 +370,11 @@
 
         <div class="ul-content" role="main">
 
+            <button id="getTokenDefault" class="getTokenDefault" onclick="app.getAccessToken();">
+                Get Access Token
+            </button>
             <div id="addUserDefault" class="defaultAdd">
-                <button onclick="app.addUser();">
+                <button id="addUserBtn" onclick="app.addUser();" disabled>
                     Add
                 </button>
             </div>
