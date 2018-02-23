@@ -36,5 +36,5 @@ The nfc plugin used is the [PhoneGapp-NFC](https://github.com/chariotsolutions/p
 
 ## Contributors
 
-[Iannotta Erennio](https://github.com/TimeParadox89)
+[Iannotta Erennio](https://github.com/TimeParadox89) , 
 [Pappalardo Francesca](https://github.com/kikkatigre).
