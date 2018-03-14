@@ -15,7 +15,7 @@ The Api call to the [SLEM-Api](https://github.com/albvol/SLEM-Api) are implement
 
 The nfc plugin used is the [PhoneGapp-NFC](https://github.com/chariotsolutions/phonegap-nfc)
 
-### Installing
+### Installation
 
 1. Once Apache Cordova is installed, just download the entire project.
 
